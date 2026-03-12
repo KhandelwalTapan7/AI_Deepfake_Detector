@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ad417862-5c37-4a81-9772-e0d91c876e82",
+    "filename": "real_train_0011 (8).jpg",
+    "timestamp": "2026-03-12T01:27:14.135923",
+    "result": {
+      "class": "Real Image",
+      "confidence": 92.48,
+      "color": "#4CAF50",
+      "probabilities": {
+        "Real Image": 92.48,
+        "AI Generated": 7.49,
+        "Deepfake": 0.02
+      },
+      "image_size": "32x32",
+      "image_format": "Unknown"
+    },
+    "image_hash": "61baa1a6b867ae698da725e57ed8641b"
+  },
+  {
+    "id": "5fff74c0-55ae-4165-95f7-822fc3e9dbe8",
+    "filename": "WhatsApp Image 2026-03-11 at 11.20.04 PM.jpeg",
+    "timestamp": "2026-03-12T11:47:27.435017",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 62.24,
+      "color": "#FF9800",
+      "probabilities": {
+        "Real Image": 24.13,
+        "AI Generated": 62.24,
+        "Deepfake": 13.63
+      },
+      "image_size": "899x1599",
+      "image_format": "Unknown"
+    },
+    "image_hash": "2b044e1c52ab52c2a38e4f22fcc51830"
+  }
+]
