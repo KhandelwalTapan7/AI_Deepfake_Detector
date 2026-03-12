@@ -1,5 +1,3 @@
-Here's a comprehensive, step-by-step README.md file for your AI Deepfake Detector project:
-
 ```markdown
 # 🛡️ DeepGuard AI - Advanced Deepfake & AI Image Detector
 
@@ -401,6 +399,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
   - "CIFAKE: Image Classification and Explainable Identification of AI-Generated Synthetic Images"
   - "FaceForensics: A Large-scale Video Dataset for Forgery Detection"
 
-## 📞 Contact & Support
 - **Documentation**: [Wiki](https://github.com/KhandelwalTapan7)
 
