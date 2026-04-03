@@ -8,9 +8,7 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </div>
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400.png?text=DeepGuard+AI+Demo" alt="Demo Screenshot" width="800">
-</p>
+
 
 ## 📋 Table of Contents
 - [Overview](#-overview)
