@@ -1,4 +1,4 @@
-```markdown
+
 # 🛡️ DeepGuard AI - Advanced Deepfake & AI Image Detector
 
 <div align="center">
