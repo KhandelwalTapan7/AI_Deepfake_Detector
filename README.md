@@ -1,5 +1,3 @@
-
-```markdown
 <div align="center">
   
   <h1>🛡️ AURORA</h1>
