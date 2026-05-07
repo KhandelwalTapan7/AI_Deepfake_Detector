@@ -1,6 +1,4 @@
-Here's a comprehensive, step-by-step README.md file for your AI Deepfake Detector project:
 
-```markdown
 # 🛡️ DeepGuard AI - Advanced Deepfake & AI Image Detector
 
 <div align="center">
@@ -10,9 +8,7 @@ Here's a comprehensive, step-by-step README.md file for your AI Deepfake Detecto
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </div>
 
-<p align="center">
-  <img src="https://via.placeholder.com/800x400.png?text=DeepGuard+AI+Demo" alt="Demo Screenshot" width="800">
-</p>
+
 
 ## 📋 Table of Contents
 - [Overview](#-overview)
@@ -401,6 +397,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
   - "CIFAKE: Image Classification and Explainable Identification of AI-Generated Synthetic Images"
   - "FaceForensics: A Large-scale Video Dataset for Forgery Detection"
 
-## 📞 Contact & Support
 - **Documentation**: [Wiki](https://github.com/KhandelwalTapan7)
 
