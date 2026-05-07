@@ -1,0 +1,54 @@
+[
+  {
+    "id": "07f35507-8796-416e-a86d-46d9b92ae2a7",
+    "filename": "0_xuZJA7BHYhVtg4Vf.gif",
+    "timestamp": "2026-05-07T11:01:40.584710",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.37677232710993513,
+      "fake_probability": 0.37677232710993513,
+      "real_probability": 0.6232276728900649,
+      "ai_probability": 0.30141786168794815,
+      "deepfake_probability": 0.37677232710993513,
+      "metrics": {
+        "ela_score": 0.5,
+        "noise_level": 0.08275542534722222,
+        "edge_density": 0.14847222222222223,
+        "frequency_anomaly": 0.17567283134307196,
+        "color_consistency": 1.0,
+        "texture_score": 0.3445361370590411,
+        "compression_quality": 95,
+        "face_detected": true,
+        "face_count": 4
+      },
+      "recommendation": "\u2753 Results inconclusive. Consider additional verification methods."
+    },
+    "image_hash": "f69def0959911d8e50a0f40cf7c2b1d0"
+  },
+  {
+    "id": "29a3afa5-40fa-4642-87ce-1f49c91c6513",
+    "filename": "Gemini_Generated_Image_ouhsg2ouhsg2ouhs (1).png",
+    "timestamp": "2026-05-07T11:52:56.431345",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.36454678177719063,
+      "fake_probability": 0.36454678177719063,
+      "real_probability": 0.6354532182228094,
+      "ai_probability": 0.2916374254217525,
+      "deepfake_probability": 0.36454678177719063,
+      "metrics": {
+        "ela_score": 0.5,
+        "noise_level": 0.08631425422442046,
+        "edge_density": 0.2043713731621516,
+        "frequency_anomaly": 0.1509568790312044,
+        "color_consistency": 0.9833670649745784,
+        "texture_score": 0.19915855365506124,
+        "compression_quality": 95,
+        "face_detected": true,
+        "face_count": 1
+      },
+      "recommendation": "\u2753 Results inconclusive. Consider additional verification methods."
+    },
+    "image_hash": "065ba3d9ad7b2ee90d771c73fb55c64b"
+  }
+]

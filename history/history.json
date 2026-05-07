@@ -34,5 +34,221 @@
       "image_format": "Unknown"
     },
     "image_hash": "2b044e1c52ab52c2a38e4f22fcc51830"
+  },
+  {
+    "id": "0c993e0f-cb95-45e2-ab61-4c7f55020517",
+    "filename": "easy_1_1110.jpg",
+    "timestamp": "2026-03-29T23:01:51.110272",
+    "result": {
+      "class": "Real Image",
+      "confidence": 74.38,
+      "color": "#4CAF50",
+      "probabilities": {
+        "Real Image": 74.38,
+        "AI Generated": 25.55,
+        "Deepfake": 0.07
+      },
+      "image_size": "600x600",
+      "image_format": "Unknown"
+    },
+    "image_hash": "78f5f473d5dc4dc2e3e294800456b260"
+  },
+  {
+    "id": "ff4f7e49-3e7c-44f4-bf17-f71a399a4ca4",
+    "filename": "IMG_0654.JPG.jpeg",
+    "timestamp": "2026-03-29T23:02:38.005095",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 59.32,
+      "color": "#F44336",
+      "probabilities": {
+        "Real Image": 22.94,
+        "AI Generated": 17.74,
+        "Deepfake": 59.32
+      },
+      "image_size": "3456x2304",
+      "image_format": "Unknown"
+    },
+    "image_hash": "2eb2cfb2bfd880e3d1d7fb527a26a73d"
+  },
+  {
+    "id": "fcac0ffd-927c-4791-9706-ffd7a79fe4ae",
+    "filename": "IMG_0654.JPG.jpeg",
+    "timestamp": "2026-03-29T23:07:15.322467",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 59.32,
+      "color": "#F44336",
+      "probabilities": {
+        "Real Image": 22.94,
+        "AI Generated": 17.74,
+        "Deepfake": 59.32
+      },
+      "image_size": "3456x2304",
+      "image_format": "Unknown"
+    },
+    "image_hash": "2eb2cfb2bfd880e3d1d7fb527a26a73d"
+  },
+  {
+    "id": "e8cdfc9a-3cc2-4d4f-a9b9-ead5b655cf68",
+    "filename": "ChatGPT Image Mar 26, 2026, 02_52_31 PM.png",
+    "timestamp": "2026-03-29T23:08:17.496499",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 85.41,
+      "color": "#FF9800",
+      "probabilities": {
+        "Real Image": 12.67,
+        "AI Generated": 85.41,
+        "Deepfake": 1.92
+      },
+      "image_size": "1536x1024",
+      "image_format": "Unknown"
+    },
+    "image_hash": "8a2a4aa9aa3f6308f4d86c4568f38f6b"
+  },
+  {
+    "id": "8733b498-1e7b-42af-8689-cbb79244cc6c",
+    "filename": "IMG_0652.JPG.jpeg",
+    "timestamp": "2026-03-29T23:08:33.051748",
+    "result": {
+      "class": "Real Image",
+      "confidence": 61.86,
+      "color": "#4CAF50",
+      "probabilities": {
+        "Real Image": 61.86,
+        "AI Generated": 37.47,
+        "Deepfake": 0.67
+      },
+      "image_size": "3456x2304",
+      "image_format": "Unknown"
+    },
+    "image_hash": "fa53cace9c2a510faab5c3d0429495b5"
+  },
+  {
+    "id": "3e8da692-6d8a-4c11-93c1-7ac9518eba54",
+    "filename": "IMG_0667.JPG.jpeg",
+    "timestamp": "2026-03-29T23:08:56.796874",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 77.53,
+      "color": "#FF9800",
+      "probabilities": {
+        "Real Image": 20.6,
+        "AI Generated": 77.53,
+        "Deepfake": 1.87
+      },
+      "image_size": "3456x2304",
+      "image_format": "Unknown"
+    },
+    "image_hash": "c85afd5703a8ee294bf9bffb8f540d1c"
+  },
+  {
+    "id": "cb14bdec-c856-4265-8551-26fddf0c9c39",
+    "filename": "0_xuZJA7BHYhVtg4Vf.gif",
+    "timestamp": "2026-05-06T23:36:18.098119",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.95,
+      "probability": 0.95,
+      "fake_probability": 0.95,
+      "real_probability": 0.050000000000000044,
+      "ai_probability": 0.475,
+      "deepfake_probability": 0.95,
+      "metrics": {
+        "ela_score": 0.0,
+        "noise_level": 0.08275542534722222,
+        "edge_density": 0.14847222222222223,
+        "frequency_anomaly": 0.17567283134307196,
+        "color_consistency": 1.0,
+        "texture_score": 0.3445361370590411,
+        "compression_quality": 95,
+        "face_detected": true,
+        "face_count": 4
+      },
+      "recommendation": "\ud83d\udea8 High probability of deepfake manipulation. Do not trust without verification."
+    },
+    "image_hash": "f69def0959911d8e50a0f40cf7c2b1d0"
+  },
+  {
+    "id": "aad812f3-00d5-4f36-b64e-a33c7ae2a214",
+    "filename": "pc ssh.png",
+    "timestamp": "2026-05-06T23:39:59.719155",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.95,
+      "probability": 0.95,
+      "fake_probability": 0.95,
+      "real_probability": 0.050000000000000044,
+      "ai_probability": 0.475,
+      "deepfake_probability": 0.95,
+      "metrics": {
+        "ela_score": 0.0,
+        "noise_level": 0.14113149354279828,
+        "edge_density": 0.09007589201732795,
+        "frequency_anomaly": 0.49837985443326044,
+        "color_consistency": 0.5372739543262077,
+        "texture_score": 0.7603513116135129,
+        "compression_quality": 70,
+        "face_detected": false,
+        "face_count": 0
+      },
+      "recommendation": "\ud83d\udea8 High probability of deepfake manipulation. Do not trust without verification."
+    },
+    "image_hash": "f345773d61c548ace8886cb8b9564afe"
+  },
+  {
+    "id": "f664286a-1b35-4479-8191-79e664fb48b4",
+    "filename": "pc ssh.png",
+    "timestamp": "2026-05-06T23:40:09.775704",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.95,
+      "probability": 0.95,
+      "fake_probability": 0.95,
+      "real_probability": 0.050000000000000044,
+      "ai_probability": 0.475,
+      "deepfake_probability": 0.95,
+      "metrics": {
+        "ela_score": 0.0,
+        "noise_level": 0.14113149354279828,
+        "edge_density": 0.09007589201732795,
+        "frequency_anomaly": 0.49837985443326044,
+        "color_consistency": 0.5372739543262077,
+        "texture_score": 0.7603513116135129,
+        "compression_quality": 70,
+        "face_detected": false,
+        "face_count": 0
+      },
+      "recommendation": "\ud83d\udea8 High probability of deepfake manipulation. Do not trust without verification."
+    },
+    "image_hash": "f345773d61c548ace8886cb8b9564afe"
+  },
+  {
+    "id": "921768a2-c186-4b51-9e2b-be630e444bc8",
+    "filename": "page_1.png",
+    "timestamp": "2026-05-07T10:48:37.134743",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.95,
+      "probability": 0.95,
+      "fake_probability": 0.95,
+      "real_probability": 0.050000000000000044,
+      "ai_probability": 0.475,
+      "deepfake_probability": 0.95,
+      "metrics": {
+        "ela_score": 0.0,
+        "noise_level": 0.029705733808674983,
+        "edge_density": 0.02478444576483792,
+        "frequency_anomaly": 0.1314247686618375,
+        "color_consistency": 0.48947588685692994,
+        "texture_score": 0.22622259241524284,
+        "compression_quality": 70,
+        "face_detected": false,
+        "face_count": 0
+      },
+      "recommendation": "\ud83d\udea8 High probability of deepfake manipulation. Do not trust without verification."
+    },
+    "image_hash": "711ad2426b458c976b265aaaf5fb8ebd"
   }
 ]

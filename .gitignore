@@ -6,3 +6,23 @@ __pycache__/
 .DS_Store
 *.pth
 *.ipynb_checkpoints/
+# Ignore AI Generated dataset folder
+AI Generated dataset/
+
+# Ignore Deepfake dataset folder
+Deepfake dataset/
+
+# Ignore real_img folder
+real_img/
+
+# Ignore AI Generated dataset folder
+AI Generated dataset/
+
+# Ignore Deepfake dataset folder
+Deepfake dataset/
+
+# Ignore real_img folder
+real_img/
+
+# Ignore any other datasets (optional)
+unified_dataset/
