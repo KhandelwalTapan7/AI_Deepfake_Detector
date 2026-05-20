@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURORA — Deepfake Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root {
+  --void: #04040a;
+  --deep: #070711;
+  --surface: #0d0d1a;
+  --raise: #111127;
+  --border: rgba(99,102,241,0.18);
+  --border-hot: rgba(99,102,241,0.55);
+  --indigo: #6366f1;
+  --indigo-dim: rgba(99,102,241,0.12);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.1);
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --green: #10b981;
+  --text: #e2e8f0;
+  --muted: rgba(226,232,240,0.45);
+  --faint: rgba(226,232,240,0.18);
+  --scan: rgba(99,102,241,0.03);
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --glow: 0 0 30px rgba(99,102,241,0.25), 0 0 60px rgba(99,102,241,0.1);
+  --glow-cyan: 0 0 20px rgba(6,182,212,0.3);
+  --radius: 16px;
+  --radius-lg: 24px;
+}
+
+html{scroll-behavior:smooth}
+
+body {
+  font-family: var(--font-display);
+  background: var(--void);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ─── SCANLINES ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--scan) 2px,
+    var(--scan) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  animation: scanDrift 8s linear infinite;
+}
+@keyframes scanDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+/* ─── GRID BG ─── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* ─── ORBS ─── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbPulse 8s ease-in-out infinite;
+}
+.orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(99,102,241,0.12), transparent 70%); top: -200px; left: -150px; }
+.orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(6,182,212,0.08), transparent 70%); bottom: -100px; right: -100px; animation-delay: -4s; }
+.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(245,158,11,0.06), transparent 70%); top: 40%; left: 60%; animation-delay: -2s; }
+@keyframes orbPulse {
+  0%,100% { transform: scale(1) translate(0,0); opacity: 0.8; }
+  33% { transform: scale(1.08) translate(20px,-15px); opacity: 1; }
+  66% { transform: scale(0.94) translate(-10px,20px); opacity: 0.7; }
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  background: rgba(4,4,10,0.85);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 32px; height: 32px; }
+.logo-word {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--text);
+}
+.logo-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--indigo);
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+.nav-center {
+  display: flex;
+  gap: 2px;
+}
+.nav-tab {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px 18px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+.nav-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 18px; right: 18px;
+  height: 1px;
+  background: var(--indigo);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+.nav-tab:hover { color: var(--text); background: var(--indigo-dim); }
+.nav-tab.active { color: var(--indigo); }
+.nav-tab.active::after { transform: scaleX(1); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--green);
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.2);
+  padding: 4px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+  transition: all 0.4s;
+}
+.status-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 2s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.acc-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--cyan);
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.2);
+  padding: 4px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── LAYOUT ─── */
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 80px 28px 60px;
+}
+
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION HEADER ─── */
+.section-head {
+  margin-bottom: 48px;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  color: var(--indigo);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--indigo);
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.section-title em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-sub {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 14px;
+  line-height: 1.7;
+}
+
+/* ─── METRIC CARDS (HOME) ─── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+@media(max-width:768px){.metrics-row{grid-template-columns:repeat(2,1fr)}}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: left;
+}
+.metric-card:hover { border-color: var(--border-hot); transform: translateY(-3px); box-shadow: var(--glow); }
+.metric-card:hover::before { transform: scaleX(1); }
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
+.metric-num {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--indigo));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.metric-delta {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--green);
+  margin-top: 8px;
+}
+
+/* ─── FEATURE TRIO ─── */
+.feature-trio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+@media(max-width:768px){.feature-trio{grid-template-columns:1fr}}
+
+.feat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: all 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(99,102,241,0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feat-card:hover { border-color: var(--border-hot); transform: translateY(-5px); box-shadow: var(--glow); }
+.feat-card:hover::after { opacity: 1; }
+.feat-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--indigo-dim);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+}
+.feat-card:hover .feat-icon { background: var(--indigo); border-color: var(--indigo); transform: scale(1.05) rotate(4deg); }
+.feat-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.feat-desc { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); line-height: 1.65; }
+
+/* ─── CTA ROW ─── */
+.cta-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border: none;
+  cursor: pointer;
+  padding: 12px 28px;
+  border-radius: 10px;
+  transition: all 0.25s;
+  text-transform: uppercase;
+}
+.btn-primary {
+  background: var(--indigo);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+}
+.btn-primary:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.5); }
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--border-hot); color: var(--text); transform: translateY(-2px); }
+.btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+.btn-danger:hover { background: rgba(239,68,68,0.25); transform: translateY(-2px); }
+
+/* ─── DETECT PAGE ─── */
+.detect-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+@media(max-width:1024px){.detect-layout{grid-template-columns:1fr}}
+
+.drop-zone {
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.drop-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(99,102,241,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.drop-zone:hover, .drop-zone.drag { border-color: var(--indigo); background: rgba(99,102,241,0.04); }
+.drop-zone:hover::before, .drop-zone.drag::before { opacity: 1; }
+.drop-zone.drag { transform: scale(1.01); }
+
+.drop-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  display: block;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: dropFloat 3s ease-in-out infinite;
+}
+@keyframes dropFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.drop-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+.drop-sub { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+.fmt-chips { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.fmt-chip {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--faint);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.06em;
+}
+
+/* ─── PANEL (right col) ─── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.panel-head {
+  background: var(--raise);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.panel-dot { width: 6px; height: 6px; border-radius: 50%; }
+.pd-red { background: var(--red); }
+.pd-amber { background: var(--amber); }
+.pd-green { background: var(--green); }
+.panel-body { padding: 20px; }
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(226,232,240,0.05);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--muted); }
+.info-val { color: var(--text); font-weight: 500; }
+.info-val.green { color: var(--green); }
+.info-val.indigo { color: var(--indigo); }
+
+/* ─── PREVIEW ─── */
+.preview-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.prev-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.25s;
+}
+.prev-card:hover { border-color: var(--indigo); transform: scale(1.02); }
+.prev-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
+.prev-foot {
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--raise);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--muted);
+}
+.prev-remove {
+  background: none; border: none; color: var(--red); cursor: pointer; font-size: 0.9rem; transition: transform 0.2s;
+}
+.prev-remove:hover { transform: scale(1.15); }
+
+/* ─── RESULTS ─── */
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+  animation: slideIn 0.4s ease;
+  transition: border-color 0.3s;
+}
+.result-card:hover { border-color: var(--border-hot); }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.result-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+}
+.result-bar.real  { background: var(--green); }
+.result-bar.ai    { background: var(--amber); }
+.result-bar.fake  { background: linear-gradient(90deg, var(--red), #dc2626); }
+
+.result-body { padding: 20px 22px; }
+.result-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 7px 18px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+.verdict.real  { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+.verdict.ai    { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+.verdict.fake  { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+
+.conf-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 280px;
+}
+.conf-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(226,232,240,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.conf-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  transition: width 0.9s cubic-bezier(.22,.61,.36,1);
+}
+.conf-num { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; min-width: 44px; text-align: right; }
+
+.prob-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(226,232,240,0.06);
+}
+.prob-item { text-align: center; }
+.prob-label { font-family: var(--font-mono); font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.prob-track { height: 3px; background: rgba(226,232,240,0.08); border-radius: 99px; overflow: hidden; margin-bottom: 5px; }
+.prob-fill { height: 100%; border-radius: 99px; transition: width 0.7s ease; }
+.pf-real { background: var(--green); }
+.pf-ai { background: var(--amber); }
+.pf-fake { background: var(--red); }
+.prob-val { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; }
+
+.result-file {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--faint);
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid rgba(226,232,240,0.04);
+}
+
+/* ─── HISTORY ─── */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.fchip {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.fchip:hover, .fchip.active { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+
+.hist-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: all 0.2s;
+  animation: slideIn 0.3s ease;
+}
+.hist-row:hover { border-color: var(--border-hot); transform: translateX(4px); }
+.hist-verdict { font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; white-space: nowrap; }
+.hv-real  { background: rgba(16,185,129,0.12); color: var(--green); }
+.hv-ai    { background: rgba(245,158,11,0.12); color: var(--amber); }
+.hv-fake  { background: rgba(239,68,68,0.12); color: var(--red); }
+.hist-name { flex: 1; font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); }
+.hist-time { font-family: var(--font-mono); font-size: 0.6rem; color: var(--faint); }
+.hist-conf { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; }
+.hist-del { background: none; border: none; color: var(--faint); cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+.hist-del:hover { color: var(--red); transform: scale(1.1); }
+
+/* ─── ANALYTICS ─── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+@media(max-width:768px){.chart-grid{grid-template-columns:1fr}}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.chart-head {
+  background: var(--raise);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chart-body { padding: 24px; }
+canvas { max-height: 220px !important; }
+
+.insight-strip {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(6,182,212,0.05));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.insight-num {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+.insight-text { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+
+/* ─── FEATURES GRID ─── */
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media(max-width:900px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.feat-grid{grid-template-columns:1fr}}
+
+/* ─── ABOUT ─── */
+.about-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.about-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px;
+  text-align: center;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; left: 50%; transform: translateX(-50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(99,102,241,0.12), transparent 70%);
+  pointer-events: none;
+}
+.about-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 2rem;
+  box-shadow: var(--glow);
+}
+.tech-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 28px 0; }
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.tech-tag:hover { border-color: var(--indigo); color: var(--indigo); transform: translateY(-2px); }
+
+/* ─── TERMINAL LOG ─── */
+.terminal {
+  background: #020209;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #4ade80;
+  margin-top: 16px;
+  max-height: 140px;
+  overflow-y: auto;
+  line-height: 1.8;
+}
+.terminal::-webkit-scrollbar { width: 4px; }
+.terminal::-webkit-scrollbar-track { background: transparent; }
+.terminal::-webkit-scrollbar-thumb { background: var(--indigo); border-radius: 99px; }
+.t-muted { color: rgba(74,222,128,0.4); }
+.t-indigo { color: var(--indigo); }
+.t-cyan { color: var(--cyan); }
+.t-amber { color: var(--amber); }
+.t-red { color: var(--red); }
+
+/* ─── LOADING ─── */
+.loader-veil {
+  position: fixed; inset: 0;
+  background: rgba(4,4,10,0.96);
+  backdrop-filter: blur(20px);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  gap: 20px;
+}
+.loader-veil.show { display: flex; }
+.loader-ring {
+  width: 56px; height: 56px;
+  border: 2px solid rgba(99,102,241,0.15);
+  border-top-color: var(--indigo);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; }
+.loader-sub { font-family: var(--font-mono); font-size: 0.6rem; color: var(--faint); }
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--raise);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(.22,.61,.36,1);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-icon { font-size: 0.9rem; }
+
+/* ─── EMPTY STATE ─── */
+.empty {
+  text-align: center;
+  padding: 60px 40px;
+  font-family: var(--font-mono);
+  color: var(--faint);
+}
+.empty-icon { font-size: 2.5rem; margin-bottom: 16px; opacity: 0.4; }
+.empty-text { font-size: 0.7rem; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--indigo); }
+
+/* ─── GLITCH ─── */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  background: linear-gradient(90deg, #fff, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.glitch::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  animation: glitch1 4s infinite;
+  opacity: 0.7;
+}
+.glitch::after {
+  left: -2px;
+  text-shadow: 1px 0 var(--indigo);
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  animation: glitch2 4s infinite;
+  opacity: 0.7;
+}
+@keyframes glitch1 {
+  0%,90%,100%{transform:translate(0)}
+  92%{transform:translate(2px,-1px)}
+  94%{transform:translate(-1px,2px)}
+  96%{transform:translate(1px,-1px)}
+}
+@keyframes glitch2 {
+  0%,90%,100%{transform:translate(0)}
+  92%{transform:translate(-2px,1px)}
+  94%{transform:translate(1px,-1px)}
+  96%{transform:translate(-1px,2px)}
+}
+
+/* ─── HOME HERO EXTRA ─── */
+.hero-banner {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 60px;
+  min-height: 260px;
+}
+@media(max-width:1024px){.hero-banner{grid-template-columns:1fr}}
+
+.hero-term {
+  background: #020209;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.term-bar {
+  background: var(--raise);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.term-dots { display: flex; gap: 5px; }
+.tdot { width: 8px; height: 8px; border-radius: 50%; }
+.term-body {
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  line-height: 2;
+  color: rgba(74,222,128,0.8);
+}
+.term-line { display: flex; align-items: flex-start; gap: 10px; }
+.term-prompt { color: var(--indigo); }
+.term-out { color: rgba(74,222,128,0.6); }
+.term-cursor {
+  display: inline-block;
+  width: 7px; height: 12px;
+  background: var(--indigo);
+  animation: cursorBlink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+@keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ─── ABOUT STATS ─── */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+@media(max-width:600px){.about-stats{grid-template-columns:1fr}}
+.astat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.astat:hover { border-color: var(--border-hot); transform: translateY(-3px); }
+.astat-num {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.astat-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <circle cx="16" cy="16" r="14" stroke="url(#lg)" stroke-width="1.5" stroke-dasharray="88" stroke-dashoffset="20">
+          <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="10s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="16" cy="16" r="7" fill="url(#lg)" opacity="0.9"/>
+        <circle cx="16" cy="16" r="3" fill="#04040a"/>
+        <circle cx="16" cy="16" r="1.2" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-word">AURORA</div>
+      <div class="logo-tag">DEEPFAKE INTELLIGENCE</div>
+    </div>
+  </a>
+
+  <div class="nav-center">
+    <button class="nav-tab active" data-page="home" onclick="showPage('home')">HOME</button>
+    <button class="nav-tab" data-page="detect" onclick="showPage('detect')">DETECT</button>
+    <button class="nav-tab" data-page="features" onclick="showPage('features')">FEATURES</button>
+    <button class="nav-tab" data-page="analytics" onclick="showPage('analytics')">ANALYTICS</button>
+    <button class="nav-tab" data-page="history" onclick="showPage('history')">HISTORY</button>
+    <button class="nav-tab" data-page="about" onclick="showPage('about')">ABOUT</button>
+  </div>
+
+  <div class="nav-right">
+    <div class="acc-badge">ACC 95.27%</div>
+    <div class="status-pill" id="statusPill">
+      <div class="status-dot"></div>
+      <span id="statusText">INITIALIZING</span>
+    </div>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <!-- ══ HOME ══ -->
+  <div id="homePage" class="page active">
+    <div class="hero-banner">
+      <div>
+        <div class="eyebrow">EfficientNet-B0 · 3-Class Detection</div>
+        <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem)">
+          Unmask<br>the <em class="glitch" data-text="Digital Lie">Digital Lie</em>
+        </h1>
+        <p class="section-sub" style="margin-top:20px; max-width:480px">
+          Military-grade deepfake detection powered by a custom-trained neural network.<br>
+          Real · AI Generated · Deepfake — classified in milliseconds.
+        </p>
+        <div class="cta-row" style="margin-top:32px">
+          <button class="btn btn-primary" onclick="showPage('detect')">
+            <i class="fas fa-crosshairs"></i> Begin Analysis
+          </button>
+          <button class="btn btn-ghost" onclick="showPage('about')">
+            <i class="fas fa-circle-info"></i> Learn More
+          </button>
+        </div>
+      </div>
+      <div class="hero-term">
+        <div class="term-bar">
+          <div class="term-dots">
+            <div class="tdot pd-red"></div>
+            <div class="tdot pd-amber"></div>
+            <div class="tdot pd-green"></div>
+          </div>
+          <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--faint);margin-left:10px">aurora — neural_inference.py</span>
+        </div>
+        <div class="term-body">
+          <div class="term-line"><span class="term-prompt">$</span><span>aurora.load_model("best_model.pth")</span></div>
+          <div class="term-line"><span class="term-out">✓ EfficientNet-B0 loaded · CUDA:0</span></div>
+          <div class="term-line"><span class="term-out">✓ Classes: real | ai_generated | deepfake</span></div>
+          <div class="term-line"><span class="term-prompt">$</span><span>aurora.analyze("input.jpg")</span></div>
+          <div class="term-line"><span class="term-out t-cyan">▸ Preprocessing  [232→224 center crop]</span></div>
+          <div class="term-line"><span class="term-out t-cyan">▸ Inference      [softmax output]</span></div>
+          <div class="term-line"><span class="term-out t-amber">▸ real:         0.04</span></div>
+          <div class="term-line"><span class="term-out t-amber">▸ ai_generated: 0.11</span></div>
+          <div class="term-line" style="color:var(--red)"><span class="term-prompt" style="color:var(--red)">!</span><span>deepfake:     0.85  ← DETECTED</span></div>
+          <div class="term-line"><span class="term-prompt">$</span><span class="term-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric-card" onclick="showPage('history')">
+        <div class="metric-label">Total Scanned</div>
+        <div class="metric-num" id="mTotal">0</div>
+        <div class="metric-delta">↗ session data</div>
+      </div>
+      <div class="metric-card" onclick="showPage('analytics')">
+        <div class="metric-label">Authentic</div>
+        <div class="metric-num" id="mReal">0</div>
+        <div class="metric-delta" style="color:var(--green)">✓ verified real</div>
+      </div>
+      <div class="metric-card" onclick="showPage('analytics')">
+        <div class="metric-label">AI Generated</div>
+        <div class="metric-num" id="mAI">0</div>
+        <div class="metric-delta" style="color:var(--amber)">⚡ synthetic content</div>
+      </div>
+      <div class="metric-card" onclick="showPage('analytics')">
+        <div class="metric-label">Deepfakes</div>
+        <div class="metric-num" id="mDeepfake">0</div>
+        <div class="metric-delta" style="color:var(--red)">⚠ manipulation detected</div>
+      </div>
+    </div>
+
+    <div class="feature-trio">
+      <div class="feat-card" onclick="showPage('detect')">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">95.27% Accuracy</div>
+        <div class="feat-desc">Custom-trained EfficientNet-B0 on balanced real/AI/deepfake datasets with 5,000+ images per class.</div>
+      </div>
+      <div class="feat-card" onclick="showPage('features')">
+        <div class="feat-icon">🔬</div>
+        <div class="feat-title">3-Class Intelligence</div>
+        <div class="feat-desc">Distinguishes genuine photos from AI-generated content and face-swapped deepfakes simultaneously.</div>
+      </div>
+      <div class="feat-card" onclick="showPage('analytics')">
+        <div class="feat-icon">📡</div>
+        <div class="feat-title">Live Forensics</div>
+        <div class="feat-desc">Per-class probability scores, confidence intervals, and full detection history with export support.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DETECT ══ -->
+  <div id="detectPage" class="page">
+    <div class="section-head">
+      <div class="eyebrow">Neural Network Inference</div>
+      <h2 class="section-title">Upload & <em>Analyze</em></h2>
+      <p class="section-sub">Submit one or more images for instant classification</p>
+    </div>
+
+    <div class="detect-layout">
+      <div>
+        <div class="drop-zone" id="dropZone">
+          <span class="drop-icon"><i class="fas fa-radar"></i></span>
+          <div class="drop-title">Drop images here</div>
+          <div class="drop-sub">Click to browse · or drag & drop · up to 50 MB</div>
+          <div class="fmt-chips">
+            <span class="fmt-chip">PNG</span><span class="fmt-chip">JPG</span>
+            <span class="fmt-chip">JPEG</span><span class="fmt-chip">WEBP</span>
+            <span class="fmt-chip">BMP</span><span class="fmt-chip">GIF</span>
+          </div>
+          <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+        </div>
+
+        <div id="previewSection" style="display:none">
+          <div class="preview-wrap" id="previewGrid"></div>
+          <div style="display:flex;gap:12px;margin-top:4px;flex-wrap:wrap">
+            <button class="btn btn-primary" id="analyzeBtn"><i class="fas fa-microchip"></i> Run Analysis</button>
+            <button class="btn btn-ghost" id="clearBtn"><i class="fas fa-xmark"></i> Clear</button>
+          </div>
+        </div>
+
+        <div id="resultsSection" style="margin-top:28px"></div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-dot pd-red"></div>
+            <div class="panel-dot pd-amber"></div>
+            <div class="panel-dot pd-green"></div>
+            <span style="margin-left:6px">MODEL STATUS</span>
+          </div>
+          <div class="panel-body">
+            <div class="info-row"><span class="info-key">Architecture</span><span class="info-val indigo">EfficientNet-B0</span></div>
+            <div class="info-row"><span class="info-key">Accuracy</span><span class="info-val green">95.27%</span></div>
+            <div class="info-row"><span class="info-key">Classes</span><span class="info-val">3</span></div>
+            <div class="info-row"><span class="info-key">Resize</span><span class="info-val">232 → 224</span></div>
+            <div class="info-row"><span class="info-key">Normalization</span><span class="info-val">ImageNet</span></div>
+            <div class="info-row"><span class="info-key">Mode</span><span class="info-val" id="modelMode">Checking…</span></div>
+            <div class="info-row"><span class="info-key">Device</span><span class="info-val" id="modelDevice">—</span></div>
+          </div>
+        </div>
+
+        <div class="terminal" id="inferenceLog">
+          <div><span class="t-muted">// inference log</span></div>
+          <div><span class="t-muted">awaiting input…</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURES ══ -->
+  <div id="featuresPage" class="page">
+    <div class="section-head">
+      <div class="eyebrow">Capability Overview</div>
+      <h2 class="section-title">What <em>AURORA</em> Does</h2>
+      <p class="section-sub">8 forensic analysis vectors combined with deep learning inference</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">📉</div><div class="feat-title">Error Level Analysis</div><div class="feat-desc">Detects JPEG compression inconsistencies that reveal manipulation zones</div></div>
+      <div class="feat-card"><div class="feat-icon">〰️</div><div class="feat-title">Noise Pattern Detection</div><div class="feat-desc">Identifies statistical noise fingerprints unique to AI-generated images</div></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Frequency Analysis</div><div class="feat-desc">FFT-based detection of periodic artifacts left by GAN generators</div></div>
+      <div class="feat-card"><div class="feat-icon">🔲</div><div class="feat-title">Edge Artifact Detection</div><div class="feat-desc">Locates blending boundaries around transplanted facial regions</div></div>
+      <div class="feat-card"><div class="feat-icon">🎨</div><div class="feat-title">Color Consistency</div><div class="feat-desc">Flags color temperature and lighting mismatches across image regions</div></div>
+      <div class="feat-card"><div class="feat-icon">👁️</div><div class="feat-title">Facial Forensics</div><div class="feat-desc">Specialized detection of eye, skin, and facial symmetry anomalies</div></div>
+      <div class="feat-card"><div class="feat-icon">🤖</div><div class="feat-title">EfficientNet-B0</div><div class="feat-desc">State-of-the-art backbone trained from scratch on balanced 3-class dataset</div></div>
+      <div class="feat-card"><div class="feat-icon">⚡</div><div class="feat-title">Batch Processing</div><div class="feat-desc">Analyze multiple images simultaneously with per-file probability output</div></div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center">
+        <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">95.27%</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Val Accuracy</div></div>
+        <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">3</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Output Classes</div></div>
+        <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">&lt;1s</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Inference Time</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ANALYTICS ══ -->
+  <div id="analyticsPage" class="page">
+    <div class="section-head">
+      <div class="eyebrow">Session Intelligence</div>
+      <h2 class="section-title">Detection <em>Analytics</em></h2>
+    </div>
+
+    <div class="metrics-row" style="margin-bottom:28px">
+      <div class="metric-card"><div class="metric-label">Total Scanned</div><div class="metric-num" id="aTotal">0</div></div>
+      <div class="metric-card"><div class="metric-label">Avg Confidence</div><div class="metric-num" id="aConf">—</div></div>
+      <div class="metric-card"><div class="metric-label">Fake Rate</div><div class="metric-num" id="aFakeRate">—</div></div>
+      <div class="metric-card"><div class="metric-label">Model Acc</div><div class="metric-num" style="font-size:1.6rem">95.27%</div></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-head"><i class="fas fa-chart-pie"></i> Distribution</div>
+        <div class="chart-body"><canvas id="distChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><i class="fas fa-chart-line"></i> Weekly Trend</div>
+        <div class="chart-body"><canvas id="trendChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="insight-strip">
+      <div class="insight-num" id="insightNum">—</div>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--indigo);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px">Intelligence Report</div>
+        <div class="insight-text" id="insightMsg">Start analyzing images to generate intelligence insights.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HISTORY ══ -->
+  <div id="historyPage" class="page">
+    <div class="section-head">
+      <div class="eyebrow">Audit Trail</div>
+      <h2 class="section-title">Analysis <em>History</em></h2>
+    </div>
+
+    <div class="filter-bar">
+      <button class="fchip active" data-filter="all">All</button>
+      <button class="fchip" data-filter="real">✓ Real</button>
+      <button class="fchip" data-filter="ai_generated">⚡ AI Generated</button>
+      <button class="fchip" data-filter="deepfake">⚠ Deepfake</button>
+    </div>
+
+    <div id="historyList"></div>
+
+    <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
+      <button class="btn btn-danger" id="clearHistBtn"><i class="fas fa-trash-alt"></i> Clear All</button>
+      <button class="btn btn-ghost" id="exportHistBtn"><i class="fas fa-download"></i> Export JSON</button>
+      <button class="btn btn-ghost" id="refreshHistBtn"><i class="fas fa-arrows-rotate"></i> Refresh</button>
+    </div>
+  </div>
+
+  <!-- ══ ABOUT ══ -->
+  <div id="aboutPage" class="page">
+    <div class="about-wrap">
+      <div class="about-hero">
+        <div class="about-icon">🛡️</div>
+        <h2 style="font-size:2rem;font-weight:800;letter-spacing:0.05em;margin-bottom:10px">AURORA</h2>
+        <p style="font-family:var(--font-mono);font-size:0.7rem;color:var(--indigo);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px">Deepfake Intelligence Platform · v3.0</p>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.9;max-width:560px;margin:0 auto">
+          Aurora is a custom-trained neural network detection system built to expose AI-generated and manipulated imagery.
+          Trained on a balanced three-class dataset with up to 5,000 images per class, the model achieves
+          <strong style="color:var(--text)">95.27% validation accuracy</strong> using an EfficientNet-B0 backbone
+          with cosine annealing and differential fine-tuning.
+        </p>
+        <div class="tech-row">
+          <span class="tech-tag"><i class="fab fa-python"></i> Python 3.10</span>
+          <span class="tech-tag">🔥 PyTorch 2.x</span>
+          <span class="tech-tag">⚡ EfficientNet-B0</span>
+          <span class="tech-tag">👁 OpenCV</span>
+          <span class="tech-tag">🌶 Flask</span>
+          <span class="tech-tag">📐 NumPy</span>
+          <span class="tech-tag">📊 Chart.js</span>
+        </div>
+      </div>
+
+      <div class="about-stats">
+        <div class="astat"><div class="astat-num">95.27%</div><div class="astat-label">Val Accuracy</div></div>
+        <div class="astat"><div class="astat-num">B0</div><div class="astat-label">Architecture</div></div>
+        <div class="astat"><div class="astat-num">3</div><div class="astat-label">Classes</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /shell -->
+
+<!-- LOADER -->
+<div class="loader-veil" id="loaderVeil">
+  <div class="loader-ring"></div>
+  <div class="loader-text">RUNNING NEURAL INFERENCE</div>
+  <div class="loader-sub">EfficientNet-B0 · 95.27% accuracy</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✓</span>
+  <span id="toastMsg">Done</span>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+let history = JSON.parse(localStorage.getItem('aurora_v2') || '[]');
+let selectedFiles = [];
+let currentFilter = 'all';
+let distChart = null, trendChart = null;
+
+function counts() {
+  return {
+    total: history.length,
+    real:  history.filter(h => h.key === 'real').length,
+    ai:    history.filter(h => h.key === 'ai_generated').length,
+    fake:  history.filter(h => h.key === 'deepfake').length,
+  };
+}
+
+/* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(page + 'Page').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === page);
+  });
+  if (page === 'analytics') { updateAnalytics(); }
+  if (page === 'history')   { renderHistory(); }
+  if (page === 'home')      { updateHomeStats(); }
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function toast(msg, icon = '✓') {
+  const el = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+/* ═══════════════════════════════════════════════
+   LOG
+═══════════════════════════════════════════════ */
+function log(msg, cls = '') {
+  const el = document.getElementById('inferenceLog');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+/* ═══════════════════════════════════════════════
+   HOME STATS
+═══════════════════════════════════════════════ */
+function updateHomeStats() {
+  const c = counts();
+  document.getElementById('mTotal').textContent = c.total;
+  document.getElementById('mReal').textContent = c.real;
+  document.getElementById('mAI').textContent = c.ai;
+  document.getElementById('mDeepfake').textContent = c.fake;
+}
+updateHomeStats();
+
+/* ═══════════════════════════════════════════════
+   MODEL STATUS
+═══════════════════════════════════════════════ */
+async function checkStatus() {
+  try {
+    const r = await fetch('/model/status');
+    const d = await r.json();
+    const pill = document.getElementById('statusPill');
+    const dot = pill.querySelector('.status-dot');
+    document.getElementById('statusText').textContent = d.loaded ? 'NEURAL ACTIVE' : 'FORENSIC MODE';
+    dot.style.background = d.loaded ? 'var(--green)' : 'var(--amber)';
+    pill.style.color = d.loaded ? 'var(--green)' : 'var(--amber)';
+    pill.style.borderColor = d.loaded ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)';
+    pill.style.background = d.loaded ? 'rgba(16,185,129,0.08)' : 'rgba(245,158,11,0.08)';
+    document.getElementById('modelMode').textContent = d.mode === 'neural_network' ? 'Neural Network' : 'Forensic';
+    document.getElementById('modelMode').className = 'info-val ' + (d.loaded ? 'green' : '');
+    document.getElementById('modelDevice').textContent = d.device || '—';
+  } catch(e) {
+    document.getElementById('statusText').textContent = 'OFFLINE';
+  }
+}
+checkStatus();
+setInterval(checkStatus, 30000);
+
+/* ═══════════════════════════════════════════════
+   FILE HANDLING
+═══════════════════════════════════════════════ */
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); addFiles(Array.from(e.dataTransfer.files)); });
+fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+function addFiles(files) {
+  const imgs = files.filter(f => f.type.startsWith('image/'));
+  if (!imgs.length) { toast('Please select image files', '⚠'); return; }
+  selectedFiles.push(...imgs);
+  renderPreviews();
+  document.getElementById('previewSection').style.display = 'block';
+  toast(`${imgs.length} file${imgs.length>1?'s':''} added`, '📁');
+}
+
+function renderPreviews() {
+  const grid = document.getElementById('previewGrid');
+  grid.innerHTML = '';
+  selectedFiles.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const card = document.createElement('div');
+      card.className = 'prev-card';
+      const name = file.name.length > 18 ? file.name.substring(0,15)+'...' : file.name;
+      card.innerHTML = `<img src="${e.target.result}" alt="${file.name}">
+        <div class="prev-foot">
+          <span>${name}</span>
+          <button class="prev-remove" data-i="${i}"><i class="fas fa-xmark"></i></button>
+        </div>`;
+      grid.appendChild(card);
+      card.querySelector('.prev-remove').addEventListener('click', () => {
+        selectedFiles.splice(i, 1);
+        if (!selectedFiles.length) document.getElementById('previewSection').style.display = 'none';
+        else renderPreviews();
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  selectedFiles = [];
+  document.getElementById('previewSection').style.display = 'none';
+  fileInput.value = '';
+});
+
+/* ═══════════════════════════════════════════════
+   ANALYZE
+═══════════════════════════════════════════════ */
+document.getElementById('analyzeBtn').addEventListener('click', async () => {
+  if (!selectedFiles.length) { toast('Select images first', '⚠'); return; }
+
+  const loader = document.getElementById('loaderVeil');
+  loader.classList.add('show');
+  document.getElementById('resultsSection').innerHTML = '';
+
+  const logEl = document.getElementById('inferenceLog');
+  logEl.innerHTML = '';
+  log('// aurora inference session', 't-muted');
+  log(`> loading ${selectedFiles.length} image(s)`, 't-indigo');
+
+  const fd = new FormData();
+  selectedFiles.forEach(f => fd.append('files[]', f));
+
+  let results;
+  try {
+    const res = await fetch('/batch_analyze', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!data.results) throw new Error('No results');
+    results = data.results;
+    log('> batch_analyze complete', 't-cyan');
+  } catch(e) {
+    log('> server unavailable — demo mode', 't-amber');
+    results = selectedFiles.map(f => ({
+      filename: f.name,
+      result: {
+        class: ['AI Generated','Deepfake','Real Image'][Math.floor(Math.random()*3)],
+        class_key: ['ai_generated','deepfake','real'][Math.floor(Math.random()*3)],
+        confidence: 0.68 + Math.random() * 0.28,
+        real_probability: Math.random(),
+        ai_probability: Math.random(),
+        deepfake_probability: Math.random(),
+      }
+    }));
+    toast('Demo mode — start Flask backend for real results', '⚡');
+  }
+
+  loader.classList.remove('show');
+  displayResults(results);
+  selectedFiles = [];
+  document.getElementById('previewSection').style.display = 'none';
+  fileInput.value = '';
+  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+/* ═══════════════════════════════════════════════
+   DISPLAY RESULTS
+═══════════════════════════════════════════════ */
+function displayResults(results) {
+  const container = document.getElementById('resultsSection');
+  results.forEach(item => {
+    const r = item.result;
+    const key = r.class_key || guessKey(r.class);
+    const conf = (r.confidence * 100).toFixed(1);
+    const rp = (r.real_probability * 100).toFixed(1);
+    const ap = (r.ai_probability * 100).toFixed(1);
+    const dp = (r.deepfake_probability * 100).toFixed(1);
+
+    const barClass = key === 'real' ? 'real' : key === 'ai_generated' ? 'ai' : 'fake';
+    const verdictClass = barClass;
+    const verdictIcon = key === 'real' ? '✓' : key === 'ai_generated' ? '⚡' : '⚠';
+    const verdictLabel = key === 'real' ? 'AUTHENTIC' : key === 'ai_generated' ? 'AI GENERATED' : 'DEEPFAKE';
+
+    // Log
+    log(`> ${item.filename} → ${verdictLabel} (${conf}%)`, key === 'real' ? 't-cyan' : key === 'ai_generated' ? 't-amber' : 't-red');
+
+    // Save to history
+    history.unshift({ id: Date.now()+Math.random(), filename: item.filename, ts: new Date().toISOString(), key, display: r.class, confidence: r.confidence });
+    if (history.length > 100) history.pop();
+    localStorage.setItem('aurora_v2', JSON.stringify(history));
+
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.innerHTML = `
+      <div class="result-bar ${barClass}"></div>
+      <div class="result-body">
+        <div class="result-top">
+          <div class="verdict ${verdictClass}">${verdictIcon} ${verdictLabel}</div>
+          <div class="conf-row">
+            <div class="conf-track"><div class="conf-fill" style="width:0%" id="cf_${Date.now()}"></div></div>
+            <div class="conf-num">${conf}%</div>
+          </div>
+        </div>
+        <div class="prob-row">
+          <div class="prob-item">
+            <div class="prob-label">Real</div>
+            <div class="prob-track"><div class="prob-fill pf-real" style="width:0%"></div></div>
+            <div class="prob-val">${rp}%</div>
+          </div>
+          <div class="prob-item">
+            <div class="prob-label">AI Gen</div>
+            <div class="prob-track"><div class="prob-fill pf-ai" style="width:0%"></div></div>
+            <div class="prob-val">${ap}%</div>
+          </div>
+          <div class="prob-item">
+            <div class="prob-label">Deepfake</div>
+            <div class="prob-track"><div class="prob-fill pf-fake" style="width:0%"></div></div>
+            <div class="prob-val">${dp}%</div>
+          </div>
+        </div>
+        <div class="result-file"><i class="fas fa-file-image"></i> ${item.filename}</div>
+      </div>`;
+    container.appendChild(card);
+
+    setTimeout(() => {
+      card.querySelector('.conf-fill').style.width = conf + '%';
+      card.querySelector('.pf-real').style.width = rp + '%';
+      card.querySelector('.pf-ai').style.width = ap + '%';
+      card.querySelector('.pf-fake').style.width = dp + '%';
+    }, 60);
+  });
+
+  updateHomeStats();
+  const fakeCount = results.filter(r => (r.result.class_key||'') !== 'real').length;
+  toast(`Analysis complete · ${fakeCount} manipulation${fakeCount!==1?'s':''} detected`, fakeCount > 0 ? '⚠' : '✓');
+}
+
+function guessKey(cls) {
+  if (!cls) return 'real';
+  const l = cls.toLowerCase();
+  if (l.includes('ai') || l.includes('generat')) return 'ai_generated';
+  if (l.includes('fake')) return 'deepfake';
+  return 'real';
+}
+
+/* ═══════════════════════════════════════════════
+   HISTORY
+═══════════════════════════════════════════════ */
+function renderHistory() {
+  const c = counts();
+  document.getElementById('aTotal').textContent = c.total;
+
+  let filtered = history;
+  if (currentFilter !== 'all') filtered = history.filter(h => h.key === currentFilter);
+
+  const el = document.getElementById('historyList');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">◎</div><div class="empty-text">No records yet. Analyze some images to begin.</div></div>`;
+    return;
+  }
+
+  el.innerHTML = '';
+  filtered.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'hist-row';
+    const vClass = item.key === 'real' ? 'hv-real' : item.key === 'ai_generated' ? 'hv-ai' : 'hv-fake';
+    const vLabel = item.key === 'real' ? '✓ REAL' : item.key === 'ai_generated' ? '⚡ AI GEN' : '⚠ DEEPFAKE';
+    const date = new Date(item.ts);
+    row.innerHTML = `
+      <div class="hist-verdict ${vClass}">${vLabel}</div>
+      <div class="hist-name">${item.filename.substring(0,45)}</div>
+      <div class="hist-time">${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="hist-conf">${Math.round(item.confidence*100)}%</div>
+      <button class="hist-del" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>`;
+    row.querySelector('.hist-del').addEventListener('click', () => {
+      history = history.filter(h => h.id !== item.id);
+      localStorage.setItem('aurora_v2', JSON.stringify(history));
+      updateHomeStats();
+      renderHistory();
+      toast('Entry removed', '🗑');
+    });
+    el.appendChild(row);
+  });
+}
+
+document.querySelectorAll('.fchip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.fchip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    currentFilter = c.dataset.filter;
+    renderHistory();
+  });
+});
+
+document.getElementById('clearHistBtn').addEventListener('click', () => {
+  if (!confirm('Clear all history?')) return;
+  history = [];
+  localStorage.setItem('aurora_v2', JSON.stringify(history));
+  updateHomeStats();
+  renderHistory();
+  toast('History cleared', '🗑');
+});
+
+document.getElementById('exportHistBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(history, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `aurora_history_${Date.now()}.json`;
+  a.click();
+  toast('Exported', '📥');
+});
+
+document.getElementById('refreshHistBtn').addEventListener('click', () => { renderHistory(); toast('Refreshed', '↺'); });
+
+/* ═══════════════════════════════════════════════
+   ANALYTICS
+═══════════════════════════════════════════════ */
+function updateAnalytics() {
+  const c = counts();
+  document.getElementById('aTotal').textContent = c.total;
+
+  const avgConf = c.total > 0
+    ? (history.reduce((s,h) => s + h.confidence, 0) / c.total * 100).toFixed(1) + '%'
+    : '—';
+  const fakeRate = c.total > 0
+    ? ((c.ai + c.fake) / c.total * 100).toFixed(1) + '%'
+    : '—';
+  document.getElementById('aConf').textContent = avgConf;
+  document.getElementById('aFakeRate').textContent = fakeRate;
+
+  // Insight
+  if (c.total === 0) {
+    document.getElementById('insightNum').textContent = '—';
+    document.getElementById('insightMsg').textContent = 'Analyze images to generate intelligence insights.';
+  } else if (c.fake >= c.ai && c.fake >= c.real) {
+    document.getElementById('insightNum').textContent = c.fake;
+    document.getElementById('insightMsg').textContent = `Deepfakes dominate your scan history at ${Math.round(c.fake/c.total*100)}%. Enable facial forensic mode for deeper analysis.`;
+  } else if (c.ai > c.fake) {
+    document.getElementById('insightNum').textContent = c.ai;
+    document.getElementById('insightMsg').textContent = `AI-generated images make up ${Math.round(c.ai/c.total*100)}% of your scans. This is consistent with synthetic media proliferation trends.`;
+  } else {
+    document.getElementById('insightNum').textContent = c.real;
+    document.getElementById('insightMsg').textContent = `${Math.round(c.real/c.total*100)}% of your scanned images are authentic. Your content appears largely genuine.`;
+  }
+
+  // Charts
+  if (distChart) distChart.destroy();
+  if (trendChart) trendChart.destroy();
+
+  const ctx1 = document.getElementById('distChart').getContext('2d');
+  distChart = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+      labels: ['Authentic', 'AI Generated', 'Deepfake'],
+      datasets: [{ data: [c.real, c.ai, c.fake], backgroundColor: ['#10b981','#f59e0b','#ef4444'], borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true,
+      cutout: '72%',
+      plugins: { legend: { labels: { color: '#94a3b8', font: { family: "'JetBrains Mono'", size: 11 }, boxWidth: 10 } } }
+    }
+  });
+
+  const ctx2 = document.getElementById('trendChart').getContext('2d');
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Today'];
+  trendChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [
+        { label: 'Fake', data: days.map((_,i) => i === 6 ? c.fake : Math.max(0,c.fake - (6-i))), borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+        { label: 'AI Gen', data: days.map((_,i) => i === 6 ? c.ai : Math.max(0,c.ai - (6-i))), borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.06)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#94a3b8', font: { family: "'JetBrains Mono'", size: 11 } } } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { family: "'JetBrains Mono'", size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { family: "'JetBrains Mono'", size: 10 } } }
+      }
+    }
+  });
+}
+
+renderHistory();
+</script>
+</body>
+</html>

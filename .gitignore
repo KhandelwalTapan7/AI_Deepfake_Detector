@@ -24,5 +24,6 @@ Deepfake dataset/
 # Ignore real_img folder
 real_img/
 
-# Ignore any other datasets (optional)
 unified_dataset/
+
+datasets/

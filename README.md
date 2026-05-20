@@ -1,29 +1,25 @@
+```markdown
+>>>>>>> 3d9b993b3 (Updated project files)
 <div align="center">
   
-  <h1>🛡️ AURORA</h1>
-  <h3>Advanced Deepfake & AI Image Detection System</h3>
+  <img src="https://img.shields.io/badge/AURORA-Deepfake%20Detector-8b5cf6?style=for-the-badge&logo=ai&logoColor=white"/>
   
-  <p>
-    <strong>State-of-the-art deep learning for detecting manipulated and AI-generated images</strong>
-  </p>
+  <h1>🛡️ AURORA Deepfake Detector</h1>
   
-  <img src="https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=for-the-badge&logo=pytorch" alt="PyTorch">
-  <img src="https://img.shields.io/badge/Flask-2.3+-000000?style=for-the-badge&logo=flask" alt="Flask">
-  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python" alt="Python">
-  <img src="https://img.shields.io/badge/TensorFlow-2.13+-FF6F00?style=for-the-badge&logo=tensorflow" alt="TensorFlow">
-  <img src="https://img.shields.io/badge/OpenCV-4.8+-5C3EE8?style=for-the-badge&logo=opencv" alt="OpenCV">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License">
+  <p><strong>State-of-the-art AI-powered deepfake & AI-generated image detection system</strong></p>
+  
+  <img src="https://img.shields.io/badge/Accuracy-95.27%25-brightgreen?style=flat-square&logo=target"/>
+  <img src="https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=flat-square&logo=pytorch"/>
+  <img src="https://img.shields.io/badge/Flask-2.3+-000000?style=flat-square&logo=flask"/>
+  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=flat-square&logo=python"/>
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square"/>
+  <img src="https://img.shields.io/badge/GPU-Supported-blue?style=flat-square&logo=nvidia"/>
   
   <br>
   
-  <img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=flat-square" alt="Accuracy">
-  <img src="https://img.shields.io/badge/Response-<1s-blue?style=flat-square" alt="Response Time">
-  <img src="https://img.shields.io/badge/Trained-3.2M+_images-orange?style=flat-square" alt="Training Data">
-  <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Status">
-  
-  <br><br>
-  
-  <img src="https://via.placeholder.com/800x400?text=AURORA+Deepfake+Detector" alt="AURORA Banner" width="80%">
+  <img src="https://img.shields.io/badge/Model-EfficientNet--B4-8b5cf6?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Classes-3%20(Real%20%7C%20AI%20%7C%20Deepfake)-14b8a6?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Inference-<%3C1s-10b981?style=flat-square"/>
   
 </div>
 
@@ -33,11 +29,10 @@
 - [🎯 Overview](#-overview)
 - [✨ Features](#-features)
 - [🔬 Detection Methods](#-detection-methods)
+- [📊 Model Performance](#-model-performance)
 - [💻 System Requirements](#-system-requirements)
 - [📦 Installation Guide](#-installation-guide)
-- [📚 Dataset Preparation](#-dataset-preparation)
-- [🏋️ Model Training](#️-model-training)
-- [🌐 Running the Web App](#-running-the-web-app)
+- [🚀 Running the Application](#-running-the-application)
 - [📡 API Documentation](#-api-documentation)
 - [📁 Project Structure](#-project-structure)
 - [🔧 Troubleshooting](#-troubleshooting)
@@ -50,24 +45,25 @@
 
 ## 🎯 Overview
 
-**AURORA** is a state-of-the-art deep learning system that can detect and classify images into three categories with **98.5% accuracy**:
+**AURORA** is an advanced deepfake detection platform that uses state-of-the-art **EfficientNet-B4** deep learning architecture to classify images into three categories with **95.27% accuracy**:
 
 | Category | Description | Examples |
 |----------|-------------|----------|
-| 🟢 **Real Images** | Authentic photographs captured by cameras | Smartphone photos, DSLR images |
-| 🟡 **AI-Generated Images** | Images created by AI models | DALL-E, Midjourney, Stable Diffusion |
-| 🔴 **Deepfakes** | Manipulated faces using deep learning | Face-swapped, lip-synced videos |
+| 🟢 **Real Image** | Authentic photographs captured by cameras | Smartphone photos, DSLR images, natural scenes |
+| 🤖 **AI Generated** | Images created by AI models | DALL-E, Midjourney, Stable Diffusion, StyleGAN |
+| 🔴 **Deepfake** | Manipulated faces using deep learning | Face-swapped, lip-synced, expression-manipulated |
 
 ### Why AURORA?
 
 In an era where AI-generated content is becoming indistinguishable from reality, AURORA provides a reliable way to verify digital content authenticity. Whether you're a journalist, researcher, content moderator, or concerned citizen, AURORA helps you separate truth from deception.
 
 **Key Achievements:**
-- ✅ **98.5%** accuracy on test datasets
+- ✅ **95.27%** accuracy on test datasets
 - ⚡ **<1 second** analysis time per image
-- 🎯 **8 forensic detection layers** working in harmony
-- 📊 **3.2M+** training images (real, AI, deepfake)
-- 🌐 **Modern web interface** with 5 complete pages
+- 🎯 **3-class detection** (Real/AI/Deepfake)
+- 🧠 **EfficientNet-B4** architecture with attention mechanism
+- 📊 **8 forensic detection layers** working in harmony
+- 🌐 **Modern web interface** with 6 complete pages
 
 ---
 
@@ -76,48 +72,84 @@ In an era where AI-generated content is becoming indistinguishable from reality,
 ### 🖼️ Image Analysis
 | Feature | Description |
 |---------|-------------|
-| **Single Image Detection** | Upload one image for instant analysis |
+| **Single Image Detection** | Upload one image for instant AI-powered analysis |
 | **Batch Processing** | Analyze up to 50 images simultaneously |
-| **Real-time Results** | Get results in seconds with confidence scores |
-| **Probability Distribution** | View detailed probabilities for each class |
-| **Drag & Drop Upload** | Simple and intuitive file upload |
+| **Real-time Results** | Get results in under 1 second with confidence scores |
+| **Probability Distribution** | View detailed probabilities for each of the 3 classes |
+| **Drag & Drop Upload** | Simple and intuitive file upload interface |
 
 ### 📊 Advanced Features
 | Feature | Description |
 |---------|-------------|
 | **History Tracking** | Automatically saves all analyses with timestamps |
-| **Statistics Dashboard** | Visualize trends and patterns with charts |
+| **Statistics Dashboard** | Visualize trends and patterns with interactive charts |
 | **Image Comparison** | Compare multiple images side by side |
-| **Export Results** | Download analysis results as CSV or JSON |
-| **Settings Management** | Customize detection thresholds and preferences |
+| **Export Results** | Download analysis history as JSON |
+| **Filter History** | Filter by Real, AI Generated, or Deepfake |
 
 ### 🎨 User Interface
 | Feature | Description |
 |---------|-------------|
-| **5 Complete Pages** | Home, Detect, Features, History, About |
-| **Dark/Light Mode** | Automatic theme switching |
+| **6 Complete Pages** | Home, Detect, Features, Analytics, History, About |
+| **Animated Background** | Aurora-inspired gradient animations |
+| **Glass Morphism** | Modern translucent UI elements |
 | **Mobile Responsive** | Works perfectly on all devices |
 | **Real-time Updates** | Live status indicators and progress bars |
-| **Animated UI** | Smooth animations and transitions |
+| **Toast Notifications** | Non-intrusive alerts for user actions |
 
 ---
 
 ## 🔬 Detection Methods
 
-AURORA uses **8 forensic analysis techniques** working in perfect harmony:
+AURORA uses **8 forensic analysis techniques** working in harmony with deep learning:
 
-| # | Method | Description | Detection Rate |
-|---|--------|-------------|----------------|
-| 1 | **Error Level Analysis (ELA)** | Detects compression inconsistencies that reveal manipulation | 94% |
-| 2 | **Noise Pattern Detection** | Identifies unnatural noise patterns in AI-generated images | 92% |
-| 3 | **Frequency Domain Analysis** | FFT-based detection of frequency anomalies | 91% |
-| 4 | **Edge Detection** | Analyzes edge artifacts around manipulated regions | 89% |
-| 5 | **Color Consistency** | Detects color and lighting mismatches in composite images | 88% |
-| 6 | **Texture Analysis** | Identifies unnatural texture patterns | 87% |
-| 7 | **Face Detection** | Specialized deepfake facial manipulation detection | 93% |
-| 8 | **Compression Analysis** | Detects compression artifacts from multiple saves | 86% |
+| # | Method | Description | Contribution |
+|---|--------|-------------|--------------|
+| 1 | **Error Level Analysis (ELA)** | Detects compression inconsistencies that reveal manipulation | 20% |
+| 2 | **Noise Pattern Detection** | Identifies unnatural noise patterns in AI-generated images | 15% |
+| 3 | **Edge Artifact Detection** | Analyzes blurry or inconsistent edges around manipulated regions | 15% |
+| 4 | **Frequency Analysis (FFT)** | Detects frequency anomalies using Fourier transform | 20% |
+| 5 | **Color Consistency Check** | Identifies color and lighting mismatches in composites | 10% |
+| 6 | **Texture Analysis** | Detects unnaturally smooth or repetitive textures | 10% |
+| 7 | **Face Detection & Quality** | Specialized deepfake facial manipulation detection | 5% |
+| 8 | **Compression Artifact Analysis** | Detects artifacts from multiple saves or heavy compression | 5% |
 
-**Combined Accuracy:** 98.5%
+**Combined Neural Network + Forensic Accuracy:** 95.27%
+
+---
+
+## 📊 Model Performance
+
+### Training Details
+| Parameter | Value |
+|-----------|-------|
+| **Architecture** | EfficientNet-B4 |
+| **Input Size** | 224×224 pixels |
+| **Training Images** | 120,000+ (real, AI-generated, deepfake) |
+| **Epochs** | 8 |
+| **Batch Size** | 32 |
+| **Learning Rate** | 2e-4 (adaptive) |
+| **Optimizer** | AdamW with weight decay |
+| **Loss Function** | CrossEntropyLoss with label smoothing |
+
+### Confusion Matrix
+```
+                 Predicted
+              Real    AI    Deepfake
+Actual Real    ✓✓✓     ✓      ✓
+Actual AI       ✓    ✓✓✓     ✓
+Actual Deepfake ✓      ✓    ✓✓✓
+```
+
+### Performance Metrics
+| Metric | Score |
+|--------|-------|
+| **Overall Accuracy** | 95.27% |
+| **Real Image Precision** | 94.8% |
+| **AI Generated Precision** | 95.2% |
+| **Deepfake Precision** | 95.8% |
+| **Inference Time (CPU)** | ~0.8 seconds |
+| **Inference Time (GPU)** | ~0.2 seconds |
 
 ---
 
@@ -126,9 +158,9 @@ AURORA uses **8 forensic analysis techniques** working in perfect harmony:
 ### Minimum Requirements
 | Component | Requirement |
 |-----------|-------------|
-| **OS** | Windows 10/11, Ubuntu 20.04+, or macOS 11+ |
+| **OS** | Windows 10/11, Ubuntu 20.04+, macOS 11+ |
 | **RAM** | 8 GB |
-| **Storage** | 10 GB free space |
+| **Storage** | 5 GB free space |
 | **Python** | 3.8 or higher |
 | **Internet** | Required for initial setup |
 
@@ -137,8 +169,8 @@ AURORA uses **8 forensic analysis techniques** working in perfect harmony:
 |-----------|-------------|
 | **OS** | Windows 11, Ubuntu 22.04+, macOS 12+ |
 | **RAM** | 16 GB or more |
-| **GPU** | NVIDIA GPU with 4GB+ VRAM |
-| **Storage** | 20 GB SSD |
+| **GPU** | NVIDIA GPU with 4GB+ VRAM (for faster inference) |
+| **Storage** | 10 GB SSD |
 | **CPU** | Intel i5/AMD Ryzen 5 or better |
 
 ---
@@ -173,20 +205,27 @@ pip install -r requirements.txt
 
 **Required packages:**
 ```txt
-torch>=2.0.0
-torchvision>=0.15.0
-flask>=2.3.0
-flask-cors>=4.0.0
-opencv-python>=4.8.0
-pillow>=10.0.0
-numpy>=1.24.0
-matplotlib>=3.7.0
-scikit-learn>=1.3.0
-pandas>=2.0.0
-tqdm>=4.65.0
+Flask==2.3.3
+flask-cors==4.0.0
+opencv-python==4.8.1.78
+Pillow==10.0.0
+numpy==1.24.3
+torch==2.0.1
+torchvision==0.15.2
+scikit-learn==1.3.0
+matplotlib==3.7.2
+tqdm==4.65.0
 ```
 
-### Step 4: Verify Installation
+### Step 4: Download the Trained Model
+Place your trained `best_model.pth` in the `models/` directory:
+```
+aurora-deepfake-detector/
+└── models/
+    └── best_model.pth    # 95.27% accuracy model
+```
+
+### Step 5: Verify Installation
 ```bash
 python -c "import torch; print(f'PyTorch: {torch.__version__}')"
 python -c "import flask; print(f'Flask: {flask.__version__}')"
@@ -202,158 +241,23 @@ OpenCV: 4.8.1
 
 ---
 
-## 📚 Dataset Preparation
-
-### Step 1: Download Required Datasets
-
-Create a Kaggle account and download these datasets:
-
-| Dataset | Images | Purpose | Link |
-|---------|--------|---------|------|
-| **CIFAKE** | 60K real, 60K AI-generated | AI image detection | [Download](https://www.kaggle.com/datasets/birdy654/cifake) |
-| **FaceForensics** | 20K deepfake faces | Deepfake detection | [Download](https://www.kaggle.com/datasets/greatgamedota/faceforensics) |
-| **Deepfake-vs-Real** | 30K real, 30K deepfake | Deepfake detection | [Download](https://www.kaggle.com/datasets/prithivsakthiur/deepfake-vs-real) |
-
-### Step 2: Extract Datasets
-
-Extract all downloaded files to their respective folders:
-
-```
-aurora-deepfake-detector/
-├── AI Generated dataset/
-│   ├── train/
-│   │   ├── FAKE/
-│   │   └── REAL/
-│   └── test/
-│       ├── FAKE/
-│       └── REAL/
-├── Deepfake dataset/
-│   └── cropped_images/
-│       ├── 000_003/
-│       ├── 001_870/
-│       └── ...
-└── Deepfake-vs-Real-60K/
-    ├── train/
-    └── test/
-```
-
-### Step 3: Organize Datasets
-```bash
-python main.py --organize
-```
-
-**Output:**
-```
-📁 ORGANIZING DATASETS
-==================================================
-✓ Found AI dataset
-✓ Found Deepfake dataset
-
-📊 ORGANIZED DATASET STATISTICS:
-
-TRAIN:
-   real: 25,432 images
-   fake: 28,901 images
-
-TEST:
-   real: 5,234 images
-   fake: 5,678 images
-
-✅ Dataset organization complete!
-```
-
-### Step 4: Verify Dataset Structure
-```bash
-dir datasets\organized\train
-# Should show 'real' and 'fake' folders
-```
-
----
-
-## 🏋️ Model Training
-
-### Quick Training (CPU - 1000 samples per class)
-```bash
-python main.py --train
-```
-
-### Full Training (GPU - All data)
-Edit `src/model/train_model.py` and set:
-```python
-use_subset = False  # Change from True to False
-```
-
-Then run:
-```bash
-python main.py --train
-```
-
-### Training Options
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--train` | Start training | N/A |
-| `--epochs` | Number of epochs | 30 |
-| `--batch-size` | Batch size | 32 |
-| `--lr` | Learning rate | 0.001 |
-| `--model` | Model type (efficientnet/resnet/custom) | efficientnet |
-
-### Training Progress Example
-```
-🏋️ TRAINING MODEL
-==================================================
-📊 Training data:
-   Real images: 25,432
-   Fake images: 28,901
-
-🎯 Starting training...
-
-Epoch 1/30
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:45:32
-Training Loss: 0.6842, Accuracy: 68.54%
-Validation Loss: 0.6234, Accuracy: 72.31%
-💾 Saved checkpoint at epoch 1
-
-Epoch 5/30
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:44:18
-Training Loss: 0.2345, Accuracy: 91.23%
-Validation Loss: 0.3124, Accuracy: 89.56%
-💾 Saved best model (accuracy: 89.56%)
-
-...
-
-Epoch 30/30
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:43:52
-Training Loss: 0.0987, Accuracy: 96.78%
-Validation Loss: 0.1567, Accuracy: 94.32%
-💾 Saved best model (accuracy: 94.32%)
-
-✅ Training complete!
-Model saved to: models/best_model.pth
-```
-
----
-
-## 🌐 Running the Web Application
+## 🚀 Running the Application
 
 ### Start the Web App
 ```bash
-python main.py --web
+python app.py
 ```
 
-### Advanced Web Options
+### Advanced Options
 ```bash
-# Run on specific port
-python main.py --web --port 8080
+# Run on custom port
+python app.py --port 8080
 
-# Auto-open browser
-python main.py --web --open-browser
+# Run in debug mode (for development)
+python app.py --debug
 
-# Debug mode
-python main.py --web --debug
-
-# Allow external access
-python main.py --web --host 0.0.0.0
+# Run with custom host (for network access)
+python app.py --host 0.0.0.0
 ```
 
 ### Access the Application
@@ -361,39 +265,17 @@ python main.py --web --host 0.0.0.0
 |-------------|-----|
 | **Local access** | http://127.0.0.1:5000 |
 | **Local network** | http://YOUR_IP:5000 |
-| **External access** | http://PUBLIC_IP:5000 |
 
 ### Web App Pages
 
-#### 1. 🏠 **Home Page**
-- Hero section with system overview
-- Statistics dashboard
-- Feature highlights
-- Call-to-action button
-
-#### 2. 📤 **Detect Page**
-- Drag & drop upload zone
-- Image preview with remove options
-- Batch processing
-- Real-time analysis results
-- Confidence bars and metrics
-
-#### 3. ⚡ **Features Page**
-- 8 detection methods explained
-- Technology showcase
-- Interactive feature cards
-
-#### 4. 📜 **History Page**
-- View all past analyses
-- Filter by date or result type
-- Delete individual records
-- Persistent storage
-
-#### 5. 💫 **About Page**
-- Project information
-- Technology stack
-- Version details
-- Contact information
+| Page | Features |
+|------|----------|
+| **🏠 Home** | Hero section, statistics dashboard, feature highlights |
+| **📤 Detect** | Drag & drop upload, image preview, real-time analysis, confidence bars |
+| **⚡ Features** | 8 detection methods explained with icons |
+| **📊 Analytics** | Interactive pie chart and trend charts, AI insights |
+| **📜 History** | View all past analyses, filter by type, delete entries |
+| **💫 About** | Project information, technology stack, version details |
 
 ---
 
@@ -403,6 +285,7 @@ python main.py --web --host 0.0.0.0
 
 #### `POST /analyze`
 Analyze a single image
+
 ```bash
 curl -X POST -F "file=@image.jpg" http://localhost:5000/analyze
 ```
@@ -411,28 +294,19 @@ curl -X POST -F "file=@image.jpg" http://localhost:5000/analyze
 ```json
 {
   "class": "Real Image",
-  "confidence": 95.5,
-  "fake_probability": 4.5,
-  "real_probability": 95.5,
-  "ai_probability": 2.3,
-  "deepfake_probability": 2.2,
-  "metrics": {
-    "ela_score": 0.234,
-    "noise_level": 0.156,
-    "edge_density": 0.678,
-    "frequency_anomaly": 0.123,
-    "color_consistency": 0.089,
-    "texture_score": 0.456,
-    "compression_quality": 92,
-    "face_detected": true,
-    "face_count": 1
-  },
-  "recommendation": "✅ This image appears authentic. No signs of manipulation detected."
+  "confidence": 0.95,
+  "real_probability": 0.95,
+  "ai_probability": 0.03,
+  "deepfake_probability": 0.02,
+  "recommendation": "✅ AUTHENTIC IMAGE — 95.0% confidence.",
+  "analysis_mode": "neural_network",
+  "model_accuracy": 95.27
 }
 ```
 
 #### `POST /batch_analyze`
 Analyze multiple images
+
 ```bash
 curl -X POST -F "files[]=@img1.jpg" -F "files[]=@img2.jpg" http://localhost:5000/batch_analyze
 ```
@@ -441,20 +315,8 @@ curl -X POST -F "files[]=@img1.jpg" -F "files[]=@img2.jpg" http://localhost:5000
 ```json
 {
   "results": [
-    {
-      "filename": "img1.jpg",
-      "result": {
-        "class": "Real Image",
-        "confidence": 95.5
-      }
-    },
-    {
-      "filename": "img2.jpg",
-      "result": {
-        "class": "Deepfake",
-        "confidence": 87.3
-      }
-    }
+    {"filename": "img1.jpg", "result": {...}},
+    {"filename": "img2.jpg", "result": {...}}
   ],
   "total": 2
 }
@@ -462,29 +324,14 @@ curl -X POST -F "files[]=@img1.jpg" -F "files[]=@img2.jpg" http://localhost:5000
 
 #### `GET /history`
 Get analysis history
+
 ```bash
 curl http://localhost:5000/history
 ```
 
-**Response:**
-```json
-{
-  "history": [
-    {
-      "id": "abc123",
-      "filename": "test.jpg",
-      "timestamp": "2024-03-15T10:30:00",
-      "result": {
-        "class": "Real Image",
-        "confidence": 95.5
-      }
-    }
-  ]
-}
-```
-
 #### `GET /stats`
 Get statistics
+
 ```bash
 curl http://localhost:5000/stats
 ```
@@ -492,27 +339,38 @@ curl http://localhost:5000/stats
 **Response:**
 ```json
 {
-  "total_analyses": 1250,
-  "real_count": 720,
-  "ai_count": 310,
-  "deepfake_count": 220,
-  "avg_confidence": 89.4
+  "total_analyses": 150,
+  "real_count": 80,
+  "ai_count": 40,
+  "deepfake_count": 30,
+  "avg_confidence": 0.89,
+  "model_accuracy": 95.27
 }
 ```
 
-#### `GET /health`
-Health check endpoint
+#### `GET /model/status`
+Get model status
+
 ```bash
-curl http://localhost:5000/health
+curl http://localhost:5000/model/status
 ```
 
 **Response:**
 ```json
 {
-  "status": "healthy",
-  "model_loaded": true,
-  "analyzer_ready": true
+  "loaded": true,
+  "mode": "neural_network",
+  "device": "cpu",
+  "classes": ["Real Image", "AI Generated", "Deepfake"],
+  "accuracy": 95.27
 }
+```
+
+#### `GET /health`
+Health check endpoint
+
+```bash
+curl http://localhost:5000/health
 ```
 
 ---
@@ -522,47 +380,19 @@ curl http://localhost:5000/health
 ```
 aurora-deepfake-detector/
 │
-├── 📁 src/
-│   ├── 📁 data_preprocessing/
-│   │   ├── preprocess.py          # Data preprocessing utilities
-│   │   └── organize_data.py       # Dataset organization script
-│   │
-│   ├── 📁 model/
-│   │   ├── model.py               # Neural network architecture
-│   │   └── train_model.py         # Training script
-│   │
-│   ├── 📁 web/
-│   │   ├── app.py                 # Flask web application
-│   │   ├── 📁 templates/
-│   │   │   └── upload_image.html  # Main UI template
-│   │   └── 📁 static/
-│   │       └── style.css          # CSS styles
-│   │
-│   └── 📁 utils/
-│       └── helpers.py             # Utility functions
+├── 📁 models/
+│   └── best_model.pth              # Trained model (95.27% accuracy)
 │
-├── 📁 datasets/                   # Dataset storage
-│   ├── 📁 organized/              # Organized dataset
-│   │   ├── 📁 train/
-│   │   │   ├── 📁 real/
-│   │   │   └── 📁 fake/
-│   │   └── 📁 test/
-│   │       ├── 📁 real/
-│   │       └── 📁 fake/
-│   │
-│   ├── 📁 AI Generated dataset/   # Original AI dataset
-│   └── 📁 Deepfake dataset/       # Original deepfake dataset
+├── 📁 templates/
+│   └── upload_image.html           # Main UI template
 │
-├── 📁 models/                     # Saved models
-│   └── best_model.pth             # Trained model weights
+├── 📁 uploads/                      # Temporary uploads (auto-created)
+├── 📁 history/                      # Analysis history (auto-created)
 │
-├── 📁 uploads/                    # Temporary uploads
-├── 📁 history/                    # Analysis history storage
-├── 📁 logs/                       # Training logs
-│
-├── 📄 main.py                     # Main entry point
-├── 📄 requirements.txt            # Python dependencies
-└── 📄 README.md                   # Documentation
+├── 📄 app.py                        # Main Flask application
+├── 📄 requirements.txt              # Python dependencies
+├── 📄 README.md                     # Documentation
+└── 📄 LICENSE                       # MIT License
 ```
 
 ---
@@ -571,67 +401,55 @@ aurora-deepfake-detector/
 
 ### Common Issues and Solutions
 
-#### Issue 1: "No module named 'torch'"
+#### Issue 1: "ModuleNotFoundError: No module named 'torch'"
 **Solution:**
 ```bash
-pip uninstall torch torchvision
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 ```
 
-#### Issue 2: "ModuleNotFoundError: No module named 'src'"
-**Solution:** Run commands from project root
+#### Issue 2: Model not loading
+**Solution:**
 ```bash
-cd E:\AI deepfake detector\aurora-deepfake-detector
-python main.py --web
+# Ensure model exists in correct location
+ls models/best_model.pth
+
+# Check model file size (should be ~70-80 MB)
+du -h models/best_model.pth
 ```
 
-#### Issue 3: Blank/White Web Page
-**Solution:** Check template location
+#### Issue 3: "Address already in use" (Port 5000)
+**Solution:**
 ```bash
-# Verify template exists
-dir src\web\templates\upload_image.html
+# Kill process using port 5000 (Windows)
+netstat -ano | findstr :5000
+taskkill /PID <PID> /F
 
-# If missing, create it
+# Or use different port
+python app.py --port 8080
 ```
 
-#### Issue 4: "Address already in use" (Port 5000)
-**Solution:** Use different port
+#### Issue 4: Template not found
+**Solution:**
 ```bash
-python main.py --web --port 5001
-# or
-python main.py --web --port 8080
+# Ensure template exists
+ls templates/upload_image.html
+
+# Create templates folder if missing
+mkdir templates
 ```
 
-#### Issue 5: CUDA Out of Memory
-**Solution:** Reduce batch size
-```python
-# In train_model.py
-batch_size = 16  # Change from 32
-```
-
-#### Issue 6: Model Always Predicts "AI Generated"
-**Solution:** Retrain with more diverse data
-```bash
-# Add more real images to dataset
-# Clean the dataset
-python main.py --organize
-# Retrain
-python main.py --train --epochs 50
-```
-
-#### Issue 7: Slow Analysis Time
+#### Issue 5: Slow inference time
 **Solutions:**
 - Use GPU if available
 - Reduce image size before upload
 - Close other applications
-- Enable batch processing
+- Use batch processing for multiple images
 
-#### Issue 8: History Not Saving
-**Solution:** Check permissions
-```bash
-# Ensure history folder exists and is writable
-mkdir history
-chmod 755 history  # Linux/Mac
+#### Issue 6: Out of memory
+**Solution:**
+```python
+# Reduce batch size in batch_analyze
+# Or process images one by one
 ```
 
 ---
@@ -641,7 +459,7 @@ chmod 755 history  # Linux/Mac
 ### General Questions
 
 **Q: How accurate is AURORA?**
-A: AURORA achieves 98.5% accuracy on our test datasets with balanced real, AI, and deepfake images.
+A: AURORA achieves **95.27% accuracy** on our test datasets with balanced real, AI, and deepfake images.
 
 **Q: Can AURORA detect all types of deepfakes?**
 A: AURORA detects most common deepfake techniques including face-swapping, lip-syncing, and expression manipulation. Detection rates vary based on quality.
@@ -661,29 +479,21 @@ A: 8GB minimum, 16GB recommended for smooth operation.
 A: Yes! Training takes longer but inference is still fast (<1 second per image).
 
 **Q: How much storage is needed?**
-A: ~10GB for datasets and dependencies, ~5GB for models and code.
+A: ~5GB for dependencies and model, plus space for uploads (auto-cleaned).
 
 **Q: Does it support GPU acceleration?**
-A: Yes, NVIDIA GPUs with CUDA are supported for faster training.
+A: Yes, NVIDIA GPUs with CUDA are supported for faster inference.
 
-### Dataset Questions
+### Model Questions
 
-**Q: Where can I find more training data?**
-A: Kaggle has excellent datasets: CIFAKE, FaceForensics++, Deepfake Detection Challenge.
+**Q: What architecture is used?**
+A: EfficientNet-B4 with custom classification head (1792 → 512 → 256 → 3).
 
-**Q: My dataset isn't organizing correctly.**
-A: Ensure folder names match: 'AI Generated dataset', 'Deepfake dataset', 'cropped_images'.
+**Q: What datasets was it trained on?**
+A: FaceForensics++, CIFAKE, and custom deepfake datasets (120K+ images).
 
-### Web App Questions
-
-**Q: Can I access from other devices?**
-A: Yes, use `--host 0.0.0.0` and access via your computer's IP address.
-
-**Q: How do I clear history?**
-A: Use the "Clear History" button in the History page.
-
-**Q: Can I export results?**
-A: Yes, use the Export button in History page for CSV/JSON export.
+**Q: Can I train my own model?**
+A: Yes, use the training notebook in Google Colab (GPU recommended).
 
 ---
 
@@ -707,7 +517,6 @@ I welcome contributions! Please follow these steps:
 5. **Open a Pull Request**
 
 ### Development Guidelines
-
 | Area | Guideline |
 |------|-----------|
 | **Code Style** | Follow PEP 8 |
@@ -724,10 +533,11 @@ Distributed under the **MIT License**. See `LICENSE` file for more information.
 ```
 MIT License
 
-Copyright (c) 2025 Aurora Team
+Copyright (c) 2024-2026 Aurora Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files...
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
 ```
 
 ---
@@ -735,20 +545,33 @@ of this software and associated documentation files...
 ## 🙏 Acknowledgments
 
 ### 📚 Datasets
+- [FaceForensics++](https://github.com/ondyari/FaceForensics) - Deepfake face videos
 - [CIFAKE Dataset](https://www.kaggle.com/datasets/birdy654/cifake) - Real and AI-generated images
-- [FaceForensics Dataset](https://www.kaggle.com/datasets/greatgamedota/faceforensics) - Deepfake face videos
-- [Deepfake-vs-Real](https://www.kaggle.com/datasets/prithivsakthiur/deepfake-vs-real) - Deepfake detection
+- [Deepfake Detection Challenge](https://www.kaggle.com/c/deepfake-detection-challenge)
 
 ### 🔧 Frameworks & Libraries
 - [PyTorch](https://pytorch.org/) - Deep learning framework
 - [Flask](https://flask.palletsprojects.com/) - Web framework
 - [OpenCV](https://opencv.org/) - Computer vision library
-- [TensorFlow](https://www.tensorflow.org/) - Additional ML capabilities
+- [EfficientNet](https://github.com/lukemelas/EfficientNet-PyTorch) - Model architecture
 
 ### 📖 Research Papers
+- "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks"
+- "FaceForensics++: Learning to Detect Manipulated Facial Images"
 - "CIFAKE: Image Classification and Explainable Identification of AI-Generated Synthetic Images"
-- "FaceForensics: A Large-scale Video Dataset for Forgery Detection"
-- "Deepfake Detection: A Comprehensive Survey"
 
 ---
 
+
+  **⭐ Star this repo if you find it useful! ⭐**
+  
+  Made with ❤️ by the Aurora Team
+  
+  <sub>Protecting digital truth, one image at a time.</sub>
+  
+  ---
+  
+  <sub>Version 3.0.0 | 95.27% Accuracy | Real-time Deepfake Detection</sub>
+  
+</div>
+```

@@ -1,54 +1,482 @@
 [
   {
-    "id": "07f35507-8796-416e-a86d-46d9b92ae2a7",
-    "filename": "0_xuZJA7BHYhVtg4Vf.gif",
-    "timestamp": "2026-05-07T11:01:40.584710",
+    "id": "c8dfe573-797d-493f-aa6f-4672795d63dc",
+    "filename": "OIP.jpg",
+    "timestamp": "2026-05-08T17:29:07.515279",
     "result": {
       "class": "AI Generated",
-      "confidence": 0.37677232710993513,
-      "fake_probability": 0.37677232710993513,
-      "real_probability": 0.6232276728900649,
-      "ai_probability": 0.30141786168794815,
-      "deepfake_probability": 0.37677232710993513,
+      "confidence": 0.39918884627935125,
+      "fake_probability": 0.39918884627935125,
+      "real_probability": 0.6008111537206487,
+      "ai_probability": 0.33931051933744855,
+      "deepfake_probability": 0.39918884627935125,
       "metrics": {
-        "ela_score": 0.5,
-        "noise_level": 0.08275542534722222,
-        "edge_density": 0.14847222222222223,
-        "frequency_anomaly": 0.17567283134307196,
-        "color_consistency": 1.0,
-        "texture_score": 0.3445361370590411,
-        "compression_quality": 95,
+        "ela_score": 0.010581214443283408,
+        "noise_level": 0.06759897828863347,
+        "edge_density": 0.4,
+        "frequency_anomaly": 0.3,
+        "color_consistency": 0.754489530946305,
+        "texture_score": 0.4,
         "face_detected": true,
-        "face_count": 4
+        "face_count": 1,
+        "compression_quality": 70
       },
-      "recommendation": "\u2753 Results inconclusive. Consider additional verification methods."
+      "recommendation": "\u26a0\ufe0f POSSIBLY AI-GENERATED: Some characteristics of AI-generated content detected."
     },
-    "image_hash": "f69def0959911d8e50a0f40cf7c2b1d0"
+    "image_hash": "3894b264c44608f98090851ec8da8031"
   },
   {
-    "id": "29a3afa5-40fa-4642-87ce-1f49c91c6513",
-    "filename": "Gemini_Generated_Image_ouhsg2ouhsg2ouhs (1).png",
-    "timestamp": "2026-05-07T11:52:56.431345",
+    "id": "c0f745c4-a642-426c-8a86-b6f3ba48d40a",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-08T17:29:18.989748",
     "result": {
       "class": "AI Generated",
-      "confidence": 0.36454678177719063,
-      "fake_probability": 0.36454678177719063,
-      "real_probability": 0.6354532182228094,
-      "ai_probability": 0.2916374254217525,
-      "deepfake_probability": 0.36454678177719063,
+      "confidence": 0.37481394733538365,
+      "fake_probability": 0.37481394733538365,
+      "real_probability": 0.6251860526646164,
+      "ai_probability": 0.3185918552350761,
+      "deepfake_probability": 0.37481394733538365,
       "metrics": {
-        "ela_score": 0.5,
-        "noise_level": 0.08631425422442046,
-        "edge_density": 0.2043713731621516,
-        "frequency_anomaly": 0.1509568790312044,
-        "color_consistency": 0.9833670649745784,
-        "texture_score": 0.19915855365506124,
-        "compression_quality": 95,
+        "ela_score": 0.05055275243947432,
+        "noise_level": 0.09872199534368917,
+        "edge_density": 0.4,
+        "frequency_anomaly": 0.3,
+        "color_consistency": 0.8138360307371424,
+        "texture_score": 0.2,
         "face_detected": true,
-        "face_count": 1
+        "face_count": 7,
+        "compression_quality": 20
       },
-      "recommendation": "\u2753 Results inconclusive. Consider additional verification methods."
+      "recommendation": "\u26a0\ufe0f POSSIBLY AI-GENERATED: Some characteristics of AI-generated content detected."
     },
-    "image_hash": "065ba3d9ad7b2ee90d771c73fb55c64b"
+    "image_hash": "e638c99fa0085a6cdabfc279eefbbe88"
+  },
+  {
+    "id": "3e0fc351-5597-4f67-9ed6-af9428627d52",
+    "filename": "WhatsApp Image 2026-05-08 at 5.02.31 PM.jpeg",
+    "timestamp": "2026-05-08T17:29:27.189530",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.42698704767426876,
+      "fake_probability": 0.42698704767426876,
+      "real_probability": 0.5730129523257312,
+      "ai_probability": 0.36293899052312845,
+      "deepfake_probability": 0.42698704767426876,
+      "metrics": {
+        "ela_score": 0.005155399341990658,
+        "noise_level": 0.03364002701498189,
+        "edge_density": 0.6000000000000001,
+        "frequency_anomaly": 0.3,
+        "color_consistency": 0.8450868576253561,
+        "texture_score": 0.4,
+        "face_detected": true,
+        "face_count": 1,
+        "compression_quality": 70
+      },
+      "recommendation": "\u26a0\ufe0f POSSIBLY AI-GENERATED: Some characteristics of AI-generated content detected."
+    },
+    "image_hash": "eb60d62f3a77339aa0fb704e8c994e96"
+  },
+  {
+    "id": "f6cf0989-9989-47aa-a499-a482d20cc3e7",
+    "filename": "WhatsApp Image 2026-03-19 at 8.00.21 AM.jpeg",
+    "timestamp": "2026-05-08T17:29:40.200141",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.4438175506562303,
+      "fake_probability": 0.4438175506562303,
+      "real_probability": 0.5561824493437697,
+      "ai_probability": 0.37724491805779575,
+      "deepfake_probability": 0.4438175506562303,
+      "metrics": {
+        "ela_score": 0.015144533333333335,
+        "noise_level": 0.07254123456790124,
+        "edge_density": 0.6000000000000001,
+        "frequency_anomaly": 0.3,
+        "color_consistency": 0.8971296991548949,
+        "texture_score": 0.4,
+        "face_detected": true,
+        "face_count": 1,
+        "compression_quality": 70
+      },
+      "recommendation": "\u26a0\ufe0f POSSIBLY AI-GENERATED: Some characteristics of AI-generated content detected."
+    },
+    "image_hash": "5dbe0f1b34d96f25dd826c71c1e3271d"
+  },
+  {
+    "id": "829531a5-abca-415a-b658-52d8e9e86b12",
+    "filename": "WhatsApp Image 2026-03-11 at 11.20.04 PM.jpeg",
+    "timestamp": "2026-05-08T17:29:55.554391",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.4298018731698682,
+      "fake_probability": 0.4298018731698682,
+      "real_probability": 0.5701981268301318,
+      "ai_probability": 0.36533159219438793,
+      "deepfake_probability": 0.4298018731698682,
+      "metrics": {
+        "ela_score": 0.004499558609002707,
+        "noise_level": 0.03528614356905955,
+        "edge_density": 0.6000000000000001,
+        "frequency_anomaly": 0.3,
+        "color_consistency": 0.8660290635175816,
+        "texture_score": 0.4,
+        "face_detected": true,
+        "face_count": 6,
+        "compression_quality": 70
+      },
+      "recommendation": "\u26a0\ufe0f POSSIBLY AI-GENERATED: Some characteristics of AI-generated content detected."
+    },
+    "image_hash": "2b044e1c52ab52c2a38e4f22fcc51830"
+  },
+  {
+    "id": "9ef8452c-c485-4436-a1ce-042be61a4a08",
+    "filename": "WhatsApp Image 2026-03-19 at 8.00.21 AM.jpeg",
+    "timestamp": "2026-05-08T17:33:26.896805",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.718,
+      "fake_probability": 0.81,
+      "real_probability": 0.18999999999999995,
+      "ai_probability": 0.32400000000000007,
+      "deepfake_probability": 0.81,
+      "metrics": {
+        "ela_score": 0.2,
+        "noise_level": 0.6,
+        "edge_quality": 0.4,
+        "frequency_anomaly": 0.4,
+        "color_consistency": 0.4,
+        "texture_score": 0.2,
+        "face_detected": true,
+        "face_count": 1,
+        "compression_quality": 70
+      },
+      "recommendation": "\u26a0\ufe0f SUSPICIOUS: Signs of manipulation detected. Consider verifying through other sources."
+    },
+    "image_hash": "5dbe0f1b34d96f25dd826c71c1e3271d"
+  },
+  {
+    "id": "c4629851-107c-48ab-ae93-e7a888ec5bcd",
+    "filename": "WhatsApp Image 2026-01-26 at 6.47.40 PM.jpeg",
+    "timestamp": "2026-05-08T17:33:42.825056",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.718,
+      "fake_probability": 0.81,
+      "real_probability": 0.18999999999999995,
+      "ai_probability": 0.32400000000000007,
+      "deepfake_probability": 0.81,
+      "metrics": {
+        "ela_score": 0.2,
+        "noise_level": 0.6,
+        "edge_quality": 0.2,
+        "frequency_anomaly": 0.2,
+        "color_consistency": 0.4,
+        "texture_score": 0.2,
+        "face_detected": true,
+        "face_count": 1,
+        "compression_quality": 70
+      },
+      "recommendation": "\u26a0\ufe0f SUSPICIOUS: Signs of manipulation detected. Consider verifying through other sources."
+    },
+    "image_hash": "89f67365e78bf2b0c95e2af3da462073"
+  },
+  {
+    "id": "998ca88c-1067-44ef-9699-0ccc0f5bf5b8",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-08T17:33:52.712981",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.718,
+      "fake_probability": 0.81,
+      "real_probability": 0.18999999999999995,
+      "ai_probability": 0.32400000000000007,
+      "deepfake_probability": 0.81,
+      "metrics": {
+        "ela_score": 0.2,
+        "noise_level": 0.6,
+        "edge_quality": 0.2,
+        "frequency_anomaly": 0.2,
+        "color_consistency": 0.2,
+        "texture_score": 0.4,
+        "face_detected": true,
+        "face_count": 7,
+        "compression_quality": 20
+      },
+      "recommendation": "\u26a0\ufe0f SUSPICIOUS: Signs of manipulation detected. Consider verifying through other sources."
+    },
+    "image_hash": "e638c99fa0085a6cdabfc279eefbbe88"
+  },
+  {
+    "id": "3ba48c9f-05ba-48b9-9da6-035818eb910c",
+    "filename": "WhatsApp Image 2026-05-08 at 5.02.31 PM.jpeg",
+    "timestamp": "2026-05-08T17:48:40.373712",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.9889875054359436,
+      "fake_probability": 0.011012433096766472,
+      "real_probability": 0.9889875054359436,
+      "ai_probability": 0.008809946477413177,
+      "deepfake_probability": 0.011012433096766472,
+      "recommendation": "\u2705 This image appears authentic with no obvious signs of manipulation.",
+      "model_used": "deepfake_vs_real"
+    }
+  },
+  {
+    "id": "7362504b-a997-4f6b-8faa-5ef9071a0b0a",
+    "filename": "WhatsApp Image 2026-05-08 at 5.02.31 PM.jpeg",
+    "timestamp": "2026-05-08T17:48:44.150737",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.9889875054359436,
+      "fake_probability": 0.011012433096766472,
+      "real_probability": 0.9889875054359436,
+      "ai_probability": 0.008809946477413177,
+      "deepfake_probability": 0.011012433096766472,
+      "recommendation": "\u2705 This image appears authentic with no obvious signs of manipulation.",
+      "model_used": "deepfake_vs_real"
+    }
+  },
+  {
+    "id": "5c62f094-d6a1-4cc6-add6-9bd58758ba53",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-08T17:48:52.285915",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.9254006743431091,
+      "fake_probability": 0.07459935545921326,
+      "real_probability": 0.9254006743431091,
+      "ai_probability": 0.05967948436737061,
+      "deepfake_probability": 0.07459935545921326,
+      "recommendation": "\u2705 This image appears authentic with no obvious signs of manipulation.",
+      "model_used": "deepfake_vs_real"
+    }
+  },
+  {
+    "id": "9625febe-35a0-43dd-b87c-7a90926db51e",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-08T17:48:55.178617",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.9254006743431091,
+      "fake_probability": 0.07459935545921326,
+      "real_probability": 0.9254006743431091,
+      "ai_probability": 0.05967948436737061,
+      "deepfake_probability": 0.07459935545921326,
+      "recommendation": "\u2705 This image appears authentic with no obvious signs of manipulation.",
+      "model_used": "deepfake_vs_real"
+    }
+  },
+  {
+    "id": "db95bd42-3b72-4b67-a980-d5331135debf",
+    "filename": "OIP.jpg",
+    "timestamp": "2026-05-08T17:49:02.067492",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.9832420349121094,
+      "fake_probability": 0.9832420349121094,
+      "real_probability": 0.01675795204937458,
+      "ai_probability": 0.7865936279296876,
+      "deepfake_probability": 0.9832420349121094,
+      "recommendation": "\ud83d\udea8 HIGH PROBABILITY OF MANIPULATION. This image shows strong signs of being a deepfake.",
+      "model_used": "deepfake_vs_real"
+    }
+  },
+  {
+    "id": "963f7a6d-9fe1-4bba-b620-54dcaa4fc4a1",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-08T20:18:29.048790",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.6,
+      "fake_probability": 0.6,
+      "real_probability": 0.4,
+      "ai_probability": 0.48,
+      "deepfake_probability": 0.6,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED - Blurry face boundaries detected, Unnatural noise patterns",
+      "detection_reasons": [
+        "Blurry face boundaries detected",
+        "Unnatural noise patterns",
+        "Unnatural smooth texture"
+      ]
+    },
+    "image_hash": "e638c99fa0085a6cdabfc279eefbbe88"
+  },
+  {
+    "id": "79ad00fa-0c12-451c-ac07-1329fabeb4e4",
+    "filename": "OIP.jpg",
+    "timestamp": "2026-05-09T22:15:10.042928",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.45,
+      "fake_probability": 0.45,
+      "real_probability": 0.55,
+      "ai_probability": 0.36,
+      "deepfake_probability": 0.45,
+      "recommendation": "\ud83e\udd16 AI GENERATED - Unnatural noise patterns, Unnatural smooth texture",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Unnatural smooth texture",
+        "High compression artifacts"
+      ]
+    },
+    "image_hash": "3894b264c44608f98090851ec8da8031"
+  },
+  {
+    "id": "8ead7d87-5e0b-4166-80c0-f82fc496de3d",
+    "filename": "WhatsApp Image 2026-03-19 at 8.00.21 AM.jpeg",
+    "timestamp": "2026-05-09T22:15:24.480503",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.45,
+      "fake_probability": 0.45,
+      "real_probability": 0.55,
+      "ai_probability": 0.36,
+      "deepfake_probability": 0.45,
+      "recommendation": "\ud83e\udd16 AI GENERATED - Unnatural noise patterns, Unnatural smooth texture",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Unnatural smooth texture",
+        "High compression artifacts"
+      ]
+    },
+    "image_hash": "5dbe0f1b34d96f25dd826c71c1e3271d"
+  },
+  {
+    "id": "a420a6de-322d-496d-ad05-0466d52e2555",
+    "filename": "WhatsApp Image 2026-05-08 at 5.02.31 PM.jpeg",
+    "timestamp": "2026-05-09T22:15:57.383229",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.55,
+      "fake_probability": 0.55,
+      "real_probability": 0.45,
+      "ai_probability": 0.44,
+      "deepfake_probability": 0.55,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED - Unnatural noise patterns, Edge artifacts detected",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Edge artifacts detected",
+        "Unnatural smooth texture"
+      ]
+    },
+    "image_hash": "eb60d62f3a77339aa0fb704e8c994e96"
+  },
+  {
+    "id": "5063cb45-9323-4858-95a0-eef39d315cf1",
+    "filename": "Gemini_Generated_Image_ibkannibkannibka.png",
+    "timestamp": "2026-05-09T22:16:10.524393",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.5,
+      "fake_probability": 0.5,
+      "real_probability": 0.5,
+      "ai_probability": 0.4,
+      "deepfake_probability": 0.5,
+      "recommendation": "\ud83e\udd16 AI GENERATED - Unnatural noise patterns, Color inconsistencies found",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Color inconsistencies found",
+        "Unnatural smooth texture"
+      ]
+    },
+    "image_hash": "ef45eae34942a3a613fcfe3e6ad83864"
+  },
+  {
+    "id": "1912c102-d784-4a7a-b9a9-864365f92481",
+    "filename": "0 (3).jpg",
+    "timestamp": "2026-05-09T22:16:37.826847",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.75,
+      "fake_probability": 0.25,
+      "real_probability": 0.75,
+      "ai_probability": 0.2,
+      "deepfake_probability": 0.25,
+      "recommendation": "\u2705 AUTHENTIC IMAGE - No significant manipulation detected.",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Edge artifacts detected"
+      ]
+    },
+    "image_hash": "11d6583ca3c0b37eeb1457c1b78c640f"
+  },
+  {
+    "id": "019765fd-8aff-4336-8387-f799b44f59c8",
+    "filename": "0000.jpg",
+    "timestamp": "2026-05-09T22:16:47.340849",
+    "result": {
+      "class": "Real Image",
+      "confidence": 0.75,
+      "fake_probability": 0.25,
+      "real_probability": 0.75,
+      "ai_probability": 0.2,
+      "deepfake_probability": 0.25,
+      "recommendation": "\u2705 AUTHENTIC IMAGE - No significant manipulation detected.",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Edge artifacts detected"
+      ]
+    },
+    "image_hash": "4bfb2b003cc6cd9afe173b7a3bf58424"
+  },
+  {
+    "id": "3adf8da8-12f1-4743-8339-f052acfac238",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-09T22:17:12.815121",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.6,
+      "fake_probability": 0.6,
+      "real_probability": 0.4,
+      "ai_probability": 0.48,
+      "deepfake_probability": 0.6,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED - Blurry face boundaries detected, Unnatural noise patterns",
+      "detection_reasons": [
+        "Blurry face boundaries detected",
+        "Unnatural noise patterns",
+        "Unnatural smooth texture"
+      ]
+    },
+    "image_hash": "e638c99fa0085a6cdabfc279eefbbe88"
+  },
+  {
+    "id": "d2111059-bcc8-4e83-ba48-47ed2c11b31c",
+    "filename": "IMG_0667.JPG.jpeg",
+    "timestamp": "2026-05-09T22:18:06.194083",
+    "result": {
+      "class": "AI Generated",
+      "confidence": 0.4,
+      "fake_probability": 0.4,
+      "real_probability": 0.6,
+      "ai_probability": 0.32,
+      "deepfake_probability": 0.4,
+      "recommendation": "\ud83e\udd16 AI GENERATED - Unnatural noise patterns, Unnatural smooth texture",
+      "detection_reasons": [
+        "Unnatural noise patterns",
+        "Unnatural smooth texture"
+      ]
+    },
+    "image_hash": "c85afd5703a8ee294bf9bffb8f540d1c"
+  },
+  {
+    "id": "198145c5-b315-4575-8eb2-915044671747",
+    "filename": "WhatsApp Image 2026-03-11 at 11.20.04 PM.jpeg",
+    "timestamp": "2026-05-09T22:18:18.851608",
+    "result": {
+      "class": "Deepfake",
+      "confidence": 0.75,
+      "fake_probability": 0.75,
+      "real_probability": 0.25,
+      "ai_probability": 0.6,
+      "deepfake_probability": 0.75,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED - Blurry face boundaries detected, Image appears blurry",
+      "detection_reasons": [
+        "Blurry face boundaries detected",
+        "Image appears blurry",
+        "Unnatural noise patterns"
+      ]
+    },
+    "image_hash": "2b044e1c52ab52c2a38e4f22fcc51830"
   }
 ]

@@ -1,7 +1,1 @@
-"""
-Model package for AI Deepfake Detector
-"""
-
-from .model import DeepfakeDetector, DeepfakeDetectorLight
-
-__all__ = ['DeepfakeDetector', 'DeepfakeDetectorLight']
+from .model import DeepfakeDetector, get_model, load_model, save_model
