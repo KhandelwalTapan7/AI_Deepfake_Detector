@@ -1,5 +1,4 @@
-```markdown
->>>>>>> 3d9b993b3 (Updated project files)
+
 <div align="center">
   
   <img src="https://img.shields.io/badge/AURORA-Deepfake%20Detector-8b5cf6?style=for-the-badge&logo=ai&logoColor=white"/>
