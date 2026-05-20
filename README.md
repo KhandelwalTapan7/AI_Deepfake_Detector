@@ -562,15 +562,4 @@ in the Software without restriction...
 ---
 
 
-  **⭐ Star this repo if you find it useful! ⭐**
-  
-  Made with ❤️ by the Aurora Team
-  
-  <sub>Protecting digital truth, one image at a time.</sub>
-  
-  ---
-  
-  <sub>Version 3.0.0 | 95.27% Accuracy | Real-time Deepfake Detection</sub>
-  
-</div>
-```
+ 
