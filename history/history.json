@@ -1,23 +1,5 @@
 [
   {
-    "id": "ad417862-5c37-4a81-9772-e0d91c876e82",
-    "filename": "real_train_0011 (8).jpg",
-    "timestamp": "2026-03-12T01:27:14.135923",
-    "result": {
-      "class": "Real Image",
-      "confidence": 92.48,
-      "color": "#4CAF50",
-      "probabilities": {
-        "Real Image": 92.48,
-        "AI Generated": 7.49,
-        "Deepfake": 0.02
-      },
-      "image_size": "32x32",
-      "image_format": "Unknown"
-    },
-    "image_hash": "61baa1a6b867ae698da725e57ed8641b"
-  },
-  {
     "id": "5fff74c0-55ae-4165-95f7-822fc3e9dbe8",
     "filename": "WhatsApp Image 2026-03-11 at 11.20.04 PM.jpeg",
     "timestamp": "2026-03-12T11:47:27.435017",
@@ -1686,5 +1668,77 @@
       "model_accuracy": 95.27
     },
     "image_hash": "b0f4dbf6def446eaecf83f6d868c655d"
+  },
+  {
+    "id": "26a24e25-2296-4984-8055-29275f2c3a1e",
+    "filename": "WhatsApp Image 2026-05-20 at 10.40.09 PM.jpeg",
+    "timestamp": "2026-05-20T22:46:17.005758",
+    "result": {
+      "class": "Deepfake",
+      "class_key": "deepfake",
+      "confidence": 0.692,
+      "real_probability": 0.249,
+      "ai_probability": 0.059,
+      "deepfake_probability": 0.692,
+      "fake_probability": 0.751,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED \u2014 69.2% confidence of facial manipulation.",
+      "analysis_mode": "neural_network",
+      "model_accuracy": 95.27
+    },
+    "image_hash": "f2d6ed5b1f61ada1c3fb842933d4bbdc"
+  },
+  {
+    "id": "61c5722f-eea1-4e55-a15c-2428c4bca915",
+    "filename": "ChatGPT Image May 8, 2026, 12_22_01 PM.png",
+    "timestamp": "2026-05-20T22:48:41.402007",
+    "result": {
+      "class": "Deepfake",
+      "class_key": "deepfake",
+      "confidence": 0.572,
+      "real_probability": 0.354,
+      "ai_probability": 0.074,
+      "deepfake_probability": 0.572,
+      "fake_probability": 0.646,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED \u2014 57.2% confidence of facial manipulation.",
+      "analysis_mode": "neural_network",
+      "model_accuracy": 95.27
+    },
+    "image_hash": "e638c99fa0085a6cdabfc279eefbbe88"
+  },
+  {
+    "id": "2902e06e-bb5c-448f-b8e9-bf0f8058fdf4",
+    "filename": "ai_1007.jpg",
+    "timestamp": "2026-05-20T22:49:01.466180",
+    "result": {
+      "class": "AI Generated",
+      "class_key": "ai_generated",
+      "confidence": 0.944,
+      "real_probability": 0.008,
+      "ai_probability": 0.944,
+      "deepfake_probability": 0.048,
+      "fake_probability": 0.992,
+      "recommendation": "\ud83e\udd16 AI GENERATED \u2014 94.4% confidence this image was created by artificial intelligence.",
+      "analysis_mode": "neural_network",
+      "model_accuracy": 95.27
+    },
+    "image_hash": "8eab9a6eb65f7130d8b0f652e6b4f169"
+  },
+  {
+    "id": "23be6c68-013b-4783-9bcd-fd366e996abe",
+    "filename": "WhatsApp Image 2026-05-20 at 10.40.09 PM.jpeg",
+    "timestamp": "2026-05-20T22:53:52.383043",
+    "result": {
+      "class": "Deepfake",
+      "class_key": "deepfake",
+      "confidence": 0.692,
+      "real_probability": 0.249,
+      "ai_probability": 0.059,
+      "deepfake_probability": 0.692,
+      "fake_probability": 0.751,
+      "recommendation": "\ud83d\udea8 DEEPFAKE DETECTED \u2014 69.2% confidence of facial manipulation.",
+      "analysis_mode": "neural_network",
+      "model_accuracy": 95.27
+    },
+    "image_hash": "f2d6ed5b1f61ada1c3fb842933d4bbdc"
   }
 ]
