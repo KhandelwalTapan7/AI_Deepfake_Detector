@@ -1,59 +1,65 @@
-import os, requests, sys
+import os, sys, requests
 
 MODEL_DIR  = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models')
-MODEL_PATH = os.path.join(MODEL_DIR, 'deepfake_detector_export.pth')
-FILE_ID    = "1pIat4WKLLZZFY9JflrdacFYsityCx-nb"
-MODEL_URL  = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+MODEL_PATH = os.path.join(MODEL_DIR, 'best_model.pth')
+FILE_ID    = "YOUR_GOOGLE_DRIVE_FILE_ID"   # ← paste yours here
 
 def download_model():
     if os.path.exists(MODEL_PATH):
-        size_mb = os.path.getsize(MODEL_PATH) / 1024 / 1024
-        print(f"✅ Model already present ({size_mb:.1f} MB) — skipping download")
-        return True
+        mb = os.path.getsize(MODEL_PATH) / 1024 / 1024
+        if mb > 5:
+            print(f"✅ Model already present ({mb:.1f} MB) — skipping download")
+            return True
+        print(f"⚠️  Found model but only {mb:.1f} MB — likely corrupt, re-downloading")
+        os.remove(MODEL_PATH)
 
     os.makedirs(MODEL_DIR, exist_ok=True)
-    print("📥 Downloading model from Google Drive...")
 
-    try:
-        session  = requests.Session()
-        response = session.get(MODEL_URL, stream=True, timeout=180)
+    urls = [
+        f"https://drive.usercontent.google.com/download?id={FILE_ID}&export=download&confirm=t",
+        f"https://drive.google.com/uc?export=download&id={FILE_ID}&confirm=t",
+    ]
 
-        # Bypass Google Drive virus-scan warning page for large files
-        confirm_token = None
-        for key, value in response.cookies.items():
-            if key.startswith("download_warning"):
-                confirm_token = value
-                break
+    for i, url in enumerate(urls, 1):
+        print(f"📥 Download attempt {i}/2 ...")
+        try:
+            session = requests.Session()
+            session.headers['User-Agent'] = 'Mozilla/5.0'
+            r = session.get(url, stream=True, timeout=300)
+            r.raise_for_status()
 
-        if confirm_token:
-            print("   (large file — bypassing Drive scan page)")
-            response = session.get(
-                MODEL_URL + f"&confirm={confirm_token}",
-                stream=True, timeout=180
-            )
+            # If Drive returns HTML (virus-scan page) instead of binary — skip
+            content_type = r.headers.get('content-type', '')
+            if 'text/html' in content_type:
+                print(f"   ❌ Got HTML response (Drive scan page) — trying next URL")
+                continue
 
-        response.raise_for_status()
+            downloaded = 0
+            with open(MODEL_PATH, 'wb') as f:
+                for chunk in r.iter_content(65536):
+                    if chunk:
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        print(f"\r   {downloaded/1024/1024:.1f} MB...", end='', flush=True)
 
-        total_bytes = int(response.headers.get("content-length", 0))
-        downloaded  = 0
+            mb = downloaded / 1024 / 1024
+            print(f"\n   Downloaded {mb:.1f} MB")
 
-        with open(MODEL_PATH, "wb") as f:
-            for chunk in response.iter_content(chunk_size=32768):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if total_bytes:
-                        pct = downloaded / total_bytes * 100
-                        print(f"\r   {pct:.1f}%  ({downloaded/1024/1024:.1f} MB)", end="", flush=True)
+            if mb < 5:
+                print("   ❌ File too small — Drive probably returned error page")
+                os.remove(MODEL_PATH)
+                continue
 
-        print(f"\n✅ Model saved → {MODEL_PATH}  ({downloaded/1024/1024:.1f} MB)")
-        return True
+            print(f"✅ Model saved to {MODEL_PATH}")
+            return True
 
-    except Exception as e:
-        print(f"\n❌ Download failed: {e}")
-        if os.path.exists(MODEL_PATH):
-            os.remove(MODEL_PATH)
-        return False
+        except Exception as e:
+            print(f"   ❌ Attempt {i} failed: {e}")
+            if os.path.exists(MODEL_PATH):
+                os.remove(MODEL_PATH)
 
-if __name__ == "__main__":
+    print("❌ All download attempts failed — will run in forensic mode")
+    return False
+
+if __name__ == '__main__':
     sys.exit(0 if download_model() else 1)

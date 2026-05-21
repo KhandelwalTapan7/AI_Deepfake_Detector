@@ -55,26 +55,19 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
 # ============================================================
 # Constants  — must match the notebook exactly
 # ============================================================
-
-# Class order: sorted(CLASS_DIRS.keys()) → alphabetical
-# folder names: ai_generated, deepfake, real  → indices 0, 1, 2
 CLASS_NAMES = ['ai_generated', 'deepfake', 'real']
 
-# Display labels for the UI
 CLASS_DISPLAY = {
     'ai_generated': 'AI Generated',
     'deepfake':     'Deepfake',
     'real':         'Real Image',
 }
 
-MODEL_ACCURACY = 95.27  # Percentage (from your training run)
-
-# Preprocessing — must match Cell 5 val transform
-IMG_SIZE  = 224
-RESIZE_TO = 232          # Cell 5: RESIZE_TO = 232  (NOT 256)
-MEAN      = [0.485, 0.456, 0.406]
-STD       = [0.229, 0.224, 0.225]
-
+MODEL_ACCURACY = 95.27
+IMG_SIZE       = 224
+RESIZE_TO      = 232
+MEAN           = [0.485, 0.456, 0.406]
+STD            = [0.229, 0.224, 0.225]
 CONFIDENCE_THRESHOLD = 0.50
 
 # ============================================================
@@ -83,7 +76,6 @@ CONFIDENCE_THRESHOLD = 0.50
 class DeepfakeDetector(nn.Module):
     def __init__(self, num_classes=3, dropout=0.4):
         super().__init__()
-        # Cell 6 uses efficientnet_b0, weights=None on load (we supply our own)
         self.backbone = models.efficientnet_b0(weights=None)
         in_f = self.backbone.classifier[1].in_features  # 1280 for B0
         self.backbone.classifier = nn.Sequential(
@@ -113,11 +105,8 @@ _transform    = None
 # Model Loading
 # ============================================================
 def find_model_file():
-    """Search for model checkpoint in common locations."""
     search_paths = [
-        # Colab export name (Cell 11)
         os.path.join(MODEL_FOLDER, 'deepfake_detector_export.pth'),
-        # Colab best_model name (Cell 8)
         os.path.join(MODEL_FOLDER, 'best_model.pth'),
         os.path.join(MODEL_FOLDER, 'model.pth'),
         os.path.join(PROJECT_ROOT, 'models', 'deepfake_detector_export.pth'),
@@ -133,6 +122,7 @@ def find_model_file():
         if os.path.exists(path):
             return path
     return None
+
 
 def load_model():
     global _model, _device, _model_loaded, _transform, CLASS_NAMES, CLASS_DISPLAY
@@ -153,14 +143,11 @@ def load_model():
 
         checkpoint = torch.load(model_path, map_location=_device)
 
-        # Support both formats saved by the notebook:
-        #   Cell 8  → keys: model_state_dict, epoch, val_accuracy, class_names …
-        #   Cell 11 → keys: model_state_dict, class_names, model_arch …
         if 'model_state_dict' in checkpoint:
-            state_dict = checkpoint['model_state_dict']
-            epoch      = checkpoint.get('epoch', '?')
-            accuracy   = checkpoint.get('val_accuracy', 0)
-            arch       = checkpoint.get('model_arch', 'efficientnet_b0')
+            state_dict   = checkpoint['model_state_dict']
+            epoch        = checkpoint.get('epoch', '?')
+            accuracy     = checkpoint.get('val_accuracy', 0)
+            arch         = checkpoint.get('model_arch', 'efficientnet_b0')
             ckpt_classes = checkpoint.get('class_names', CLASS_NAMES)
             print(f"📊 Checkpoint epoch={epoch} | val_acc={accuracy*100:.2f}% | arch={arch}")
             print(f"   Checkpoint class_names: {ckpt_classes}")
@@ -169,14 +156,9 @@ def load_model():
             ckpt_classes = CLASS_NAMES
             print("📊 Checkpoint loaded (direct state dict)")
 
-        # Warn if the checkpoint's class list differs from our constant
         if ckpt_classes != CLASS_NAMES:
-            print(f"⚠️  Class name mismatch!")
-            print(f"   Checkpoint : {ckpt_classes}")
-            print(f"   app.py     : {CLASS_NAMES}")
-            print("   Using checkpoint class names for inference.")
-            # Override with what was actually trained
-            CLASS_NAMES = ckpt_classes
+            print(f"⚠️  Class name mismatch — using checkpoint names: {ckpt_classes}")
+            CLASS_NAMES   = ckpt_classes
             CLASS_DISPLAY = {c: c.replace('_', ' ').title() for c in ckpt_classes}
 
         num_classes = len(CLASS_NAMES)
@@ -184,10 +166,9 @@ def load_model():
         _model.load_state_dict(state_dict, strict=True)
         _model.eval()
 
-        # Val-time transform — matches Cell 5 val branch exactly
         _transform = transforms.Compose([
-            transforms.Resize(RESIZE_TO),       # 232
-            transforms.CenterCrop(IMG_SIZE),    # 224
+            transforms.Resize(RESIZE_TO),
+            transforms.CenterCrop(IMG_SIZE),
             transforms.ToTensor(),
             transforms.Normalize(MEAN, STD),
         ])
@@ -205,10 +186,42 @@ def load_model():
 
 
 # ============================================================
+# STARTUP — runs at import time, works with Gunicorn AND python app.py
+# This is the KEY fix: Gunicorn never runs if __name__ == '__main__'
+# ============================================================
+def _startup():
+    print("\n" + "=" * 60)
+    print("  🔍 AURORA STARTUP (Gunicorn-compatible)")
+    print("=" * 60)
+    print(f"  Architecture : EfficientNet-B0")
+    print(f"  Project root : {PROJECT_ROOT}")
+    print(f"  Model folder : {MODEL_FOLDER}")
+
+    # Step 1: Download model if not present
+    try:
+        from download_model import download_model
+        download_model()
+    except ImportError:
+        print("  ℹ️  download_model.py not found — skipping download")
+    except Exception as e:
+        print(f"  ⚠️  Download error: {e}")
+        traceback.print_exc()
+
+    # Step 2: Load model into memory
+    load_model()
+
+    print("=" * 60)
+    print(f"  Mode: {'Neural Network ✅' if _model_loaded else 'Forensic fallback ⚠️'}")
+    print("=" * 60 + "\n")
+
+# Called at module import — Gunicorn imports app.py, so this always runs
+_startup()
+
+
+# ============================================================
 # Neural Network Prediction
 # ============================================================
 def predict_with_model(image_path):
-    """Run inference using the loaded EfficientNet-B0 model."""
     global _model, _device, _transform
 
     try:
@@ -224,14 +237,12 @@ def predict_with_model(image_path):
         pred_class = CLASS_NAMES[pred_idx]
         display    = CLASS_DISPLAY.get(pred_class, pred_class)
 
-        # Console debug
         print(f"\n🔬 Analyzing: {os.path.basename(image_path)}")
         for i, name in enumerate(CLASS_NAMES):
             bar = '█' * int(probs[i] * 40)
             print(f"   {name:>16}: {probs[i]*100:6.2f}%  {bar}")
         print(f"   → Prediction: {display} ({confidence*100:.2f}% confidence)")
 
-        # Recommendation text
         if pred_class == 'real':
             recommendation = (
                 f"✅ AUTHENTIC IMAGE — {confidence*100:.1f}% confidence. "
@@ -242,26 +253,25 @@ def predict_with_model(image_path):
                 f"🤖 AI GENERATED — {confidence*100:.1f}% confidence "
                 "this image was created by artificial intelligence."
             )
-        else:  # deepfake
+        else:
             recommendation = (
                 f"🚨 DEEPFAKE DETECTED — {confidence*100:.1f}% confidence "
                 "of facial manipulation."
             )
 
-        # Build probability dict keyed by CLASS_NAMES order (robust to any order)
         prob_dict = {CLASS_NAMES[i]: round(float(probs[i]), 3) for i in range(len(CLASS_NAMES))}
 
         return {
-            'class':              display,
-            'class_key':          pred_class,
-            'confidence':         round(confidence, 3),
-            'real_probability':   prob_dict.get('real', 0.0),
-            'ai_probability':     prob_dict.get('ai_generated', 0.0),
+            'class':                display,
+            'class_key':            pred_class,
+            'confidence':           round(confidence, 3),
+            'real_probability':     prob_dict.get('real', 0.0),
+            'ai_probability':       prob_dict.get('ai_generated', 0.0),
             'deepfake_probability': prob_dict.get('deepfake', 0.0),
-            'fake_probability':   round(1.0 - prob_dict.get('real', 0.0), 3),
-            'recommendation':     recommendation,
-            'analysis_mode':      'neural_network',
-            'model_accuracy':     MODEL_ACCURACY,
+            'fake_probability':     round(1.0 - prob_dict.get('real', 0.0), 3),
+            'recommendation':       recommendation,
+            'analysis_mode':        'neural_network',
+            'model_accuracy':       MODEL_ACCURACY,
         }
 
     except Exception as e:
@@ -274,7 +284,6 @@ def predict_with_model(image_path):
 # Forensic Analysis (Fallback when model is unavailable)
 # ============================================================
 def forensic_analysis(image_path):
-    """Heuristic fallback analysis using OpenCV."""
     try:
         img = cv2.imread(image_path)
         if img is None:
@@ -310,16 +319,16 @@ def forensic_analysis(image_path):
         print(f"   → Prediction  : {display} ({confidence*100:.1f}%)")
 
         return {
-            'class':               display,
-            'class_key':           pred_class,
-            'confidence':          round(confidence, 3),
-            'real_probability':    0.6 if pred_class == 'real' else 0.2,
-            'ai_probability':      0.6 if pred_class == 'ai_generated' else 0.2,
+            'class':                display,
+            'class_key':            pred_class,
+            'confidence':           round(confidence, 3),
+            'real_probability':     0.6 if pred_class == 'real' else 0.2,
+            'ai_probability':       0.6 if pred_class == 'ai_generated' else 0.2,
             'deepfake_probability': 0.6 if pred_class == 'deepfake' else 0.2,
-            'fake_probability':    0.4 if pred_class == 'real' else 0.7,
-            'recommendation':      f"Forensic heuristic suggests this is {display.lower()}.",
-            'analysis_mode':       'forensic',
-            'model_accuracy':      MODEL_ACCURACY,
+            'fake_probability':     0.4 if pred_class == 'real' else 0.7,
+            'recommendation':       f"Forensic heuristic suggests this is {display.lower()}.",
+            'analysis_mode':        'forensic',
+            'model_accuracy':       MODEL_ACCURACY,
         }
 
     except Exception as e:
@@ -328,7 +337,6 @@ def forensic_analysis(image_path):
 
 
 def analyze_image(image_path):
-    """Main dispatcher — neural network when available, forensic otherwise."""
     if _model_loaded and _model is not None:
         result = predict_with_model(image_path)
         if result:
@@ -381,7 +389,6 @@ def index():
     try:
         return render_template('upload_image.html')
     except Exception:
-        # Inline fallback UI
         return """
         <!DOCTYPE html>
         <html>
@@ -397,7 +404,7 @@ def index():
                 .btn { background:linear-gradient(135deg,#8b5cf6,#14b8a6); color:#fff; border:none; padding:12px 30px; border-radius:50px; font-size:16px; cursor:pointer; margin-top:20px; }
                 #results { margin-top:30px; background:rgba(0,0,0,.3); border-radius:20px; padding:20px; display:none; }
                 .bar-wrap { background:rgba(255,255,255,.2); border-radius:10px; height:8px; margin-top:15px; overflow:hidden; }
-                .bar-fill  { height:100%; border-radius:10px; transition:width .5s; }
+                .bar-fill { height:100%; border-radius:10px; transition:width .5s; }
             </style>
         </head>
         <body>
@@ -413,57 +420,36 @@ def index():
             <div id="results"></div>
         </div>
         <script>
-        const zone = document.getElementById('uploadZone');
-        const inp  = document.getElementById('fileInput');
-        const btn  = document.getElementById('analyzeBtn');
-        const res  = document.getElementById('results');
-        const fn   = document.getElementById('fileName');
-        let file   = null;
-
-        zone.onclick  = () => inp.click();
-        zone.ondragover  = e => { e.preventDefault(); zone.style.background='rgba(255,255,255,.15)'; };
-        zone.ondragleave = () => { zone.style.background='rgba(255,255,255,.05)'; };
-        zone.ondrop = e => {
-            e.preventDefault();
-            zone.style.background='rgba(255,255,255,.05)';
-            file = e.dataTransfer.files[0];
-            fn.innerHTML = `✅ ${file.name}`;
-        };
-        inp.onchange = e => { file = e.target.files[0]; fn.innerHTML = `✅ ${file.name}`; };
-
-        btn.onclick = async () => {
-            if (!file) { alert('Please select an image first.'); return; }
-            btn.disabled = true; btn.innerHTML = '⏳ Analyzing…';
-            res.style.display = 'block';
-            res.innerHTML = '<p>Running EfficientNet-B0 analysis…</p>';
-
-            const fd = new FormData();
-            fd.append('file', file);
-            const r = await fetch('/analyze', { method:'POST', body:fd });
-            const d = await r.json();
-
-            const pct = (d.confidence * 100).toFixed(1);
-            let badge, color;
-            const k = d.class_key || '';
-            if (k === 'real')          { badge='🟢 REAL IMAGE';   color='#4CAF50'; }
-            else if (k === 'ai_generated') { badge='🤖 AI GENERATED'; color='#FFC107'; }
-            else                       { badge='🔴 DEEPFAKE';     color='#f44336'; }
-
-            res.innerHTML = `
-              <div style="background:rgba(0,0,0,.3);border-radius:16px;padding:20px;">
-                <h2>${badge}</h2>
-                <p style="font-size:32px;font-weight:bold;">${pct}%</p>
-                <p>${d.recommendation || ''}</p>
-                <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
-                <p style="margin-top:15px;font-size:12px;opacity:.6;">
-                  Real: ${(d.real_probability*100).toFixed(1)}% &nbsp;|&nbsp;
-                  AI: ${(d.ai_probability*100).toFixed(1)}% &nbsp;|&nbsp;
-                  Deepfake: ${(d.deepfake_probability*100).toFixed(1)}%
-                </p>
-                <p style="font-size:11px;opacity:.5;">Model: EfficientNet-B0 · ${d.model_accuracy}% accuracy · mode: ${d.analysis_mode}</p>
-              </div>`;
-
-            btn.disabled = false; btn.innerHTML = '🔍 Analyze Image';
+        const zone=document.getElementById('uploadZone'),inp=document.getElementById('fileInput'),
+              btn=document.getElementById('analyzeBtn'),res=document.getElementById('results'),
+              fn=document.getElementById('fileName');
+        let file=null;
+        zone.onclick=()=>inp.click();
+        zone.ondragover=e=>{e.preventDefault();zone.style.background='rgba(255,255,255,.15)';};
+        zone.ondragleave=()=>{zone.style.background='rgba(255,255,255,.05)';};
+        zone.ondrop=e=>{e.preventDefault();zone.style.background='rgba(255,255,255,.05)';file=e.dataTransfer.files[0];fn.innerHTML=`✅ ${file.name}`;};
+        inp.onchange=e=>{file=e.target.files[0];fn.innerHTML=`✅ ${file.name}`;};
+        btn.onclick=async()=>{
+            if(!file){alert('Please select an image first.');return;}
+            btn.disabled=true;btn.innerHTML='⏳ Analyzing…';
+            res.style.display='block';res.innerHTML='<p>Running EfficientNet-B0 analysis…</p>';
+            const fd=new FormData();fd.append('file',file);
+            const r=await fetch('/analyze',{method:'POST',body:fd});
+            const d=await r.json();
+            const pct=(d.confidence*100).toFixed(1);
+            let badge,color;
+            const k=d.class_key||'';
+            if(k==='real'){badge='🟢 REAL IMAGE';color='#4CAF50';}
+            else if(k==='ai_generated'){badge='🤖 AI GENERATED';color='#FFC107';}
+            else{badge='🔴 DEEPFAKE';color='#f44336';}
+            res.innerHTML=`<div style="background:rgba(0,0,0,.3);border-radius:16px;padding:20px;">
+              <h2>${badge}</h2><p style="font-size:32px;font-weight:bold;">${pct}%</p>
+              <p>${d.recommendation||''}</p>
+              <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
+              <p style="margin-top:15px;font-size:12px;opacity:.6;">Real: ${(d.real_probability*100).toFixed(1)}% | AI: ${(d.ai_probability*100).toFixed(1)}% | Deepfake: ${(d.deepfake_probability*100).toFixed(1)}%</p>
+              <p style="font-size:11px;opacity:.5;">Model: EfficientNet-B0 · ${d.model_accuracy}% accuracy · mode: ${d.analysis_mode}</p>
+            </div>`;
+            btn.disabled=false;btn.innerHTML='🔍 Analyze Image';
         };
         </script>
         </body>
@@ -583,13 +569,13 @@ def delete_history(history_id):
 def get_stats():
     history_file = os.path.join(HISTORY_FOLDER, 'history.json')
     stats = {
-        'total_analyses':  0,
-        'real_count':      0,
-        'ai_count':        0,
-        'deepfake_count':  0,
-        'avg_confidence':  0,
-        'model_mode':      'neural_network' if _model_loaded else 'forensic',
-        'model_accuracy':  MODEL_ACCURACY,
+        'total_analyses': 0,
+        'real_count':     0,
+        'ai_count':       0,
+        'deepfake_count': 0,
+        'avg_confidence': 0,
+        'model_mode':     'neural_network' if _model_loaded else 'forensic',
+        'model_accuracy': MODEL_ACCURACY,
     }
 
     if os.path.exists(history_file):
@@ -616,24 +602,24 @@ def get_stats():
 @app.route('/model/status', methods=['GET'])
 def model_status():
     return jsonify({
-        'loaded':         _model_loaded,
-        'mode':           'neural_network' if _model_loaded else 'forensic',
-        'device':         str(_device) if _device else 'N/A',
-        'architecture':   'EfficientNet-B0',
-        'classes':        CLASS_NAMES,
-        'class_display':  CLASS_DISPLAY,
-        'accuracy':       MODEL_ACCURACY,
-        'preprocessing':  f'Resize({RESIZE_TO}) → CenterCrop({IMG_SIZE}) → Normalize(ImageNet)',
+        'loaded':        _model_loaded,
+        'mode':          'neural_network' if _model_loaded else 'forensic',
+        'device':        str(_device) if _device else 'N/A',
+        'architecture':  'EfficientNet-B0',
+        'classes':       CLASS_NAMES,
+        'class_display': CLASS_DISPLAY,
+        'accuracy':      MODEL_ACCURACY,
+        'preprocessing': f'Resize({RESIZE_TO}) → CenterCrop({IMG_SIZE}) → Normalize(ImageNet)',
     })
 
 
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({
-        'status':        'healthy',
-        'model_loaded':  _model_loaded,
+        'status':         'healthy',
+        'model_loaded':   _model_loaded,
         'analyzer_ready': True,
-        'accuracy':      MODEL_ACCURACY,
+        'accuracy':       MODEL_ACCURACY,
     })
 
 
@@ -654,26 +640,8 @@ def server_error(e):
 
 
 # ============================================================
-# Entry Point
+# Entry Point — only for local: python app.py
+# Gunicorn uses _startup() above (called at import time)
 # ============================================================
 if __name__ == '__main__':
-    print("\n" + "=" * 60)
-    print("  🔍 AURORA DEEPFAKE DETECTOR")
-    print("=" * 60)
-    print(f"  Architecture : EfficientNet-B0")
-    print(f"  Classes      : {CLASS_NAMES}")
-    print(f"  Project root : {PROJECT_ROOT}")
-    print(f"  Model folder : {MODEL_FOLDER}")
-    print(f"  Preprocessing: Resize({RESIZE_TO}) → CenterCrop({IMG_SIZE})")
-    print("=" * 60)
-
-    load_model()
-
-    print("\n" + "=" * 60)
-    print(f"  ✅ Accuracy : {MODEL_ACCURACY}%")
-    print(f"  ✅ Mode     : {'Neural Network (EfficientNet-B0)' if _model_loaded else 'Forensic fallback'}")
-    print("=" * 60)
-    print("\n🚀 Starting server …  http://127.0.0.1:5000")
-    print("🛑 Press CTRL+C to stop\n")
-
-    app.run(debug=False, host='127.0.0.1', port=5000, threaded=True)
+    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
