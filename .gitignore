@@ -11,7 +11,9 @@ AI Generated dataset/
 
 # Ignore Deepfake dataset folder
 Deepfake dataset/
-
+Add-Content .gitignore "`ndiverse_ai_faces/"
+Add-Content .gitignore "ood_crops_debug/"
+Add-Content .gitignore "ood_test_images/"
 # Ignore real_img folder
 real_img/
 
@@ -26,4 +28,10 @@ real_img/
 
 unified_dataset/
 
+datasets/history/history.json
+
 datasets/
+diverse_ai_faces/
+ood_crops_debug/
+ood_test_images/
+history/

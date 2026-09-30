@@ -11,7 +11,7 @@ import uuid
 import hashlib
 import traceback
 from datetime import datetime
-from PIL import Image
+from PIL import Image, ImageOps
 from werkzeug.utils import secure_filename
 import cv2
 import numpy as np
@@ -69,6 +69,16 @@ RESIZE_TO      = 232
 MEAN           = [0.485, 0.456, 0.406]
 STD            = [0.229, 0.224, 0.225]
 CONFIDENCE_THRESHOLD = 0.50
+
+# Face preprocessing — the model was trained ONLY on tight face crops
+# (about 150-256 px), so every upload is cropped to its face first.
+FACE_CROP_SCALE = 1.8    # crop side = detected face size x this (tested: 1.8 was most stable)
+DETECT_MAX_SIDE = 1600   # huge phone photos are downscaled to this before face detection
+NO_FACE_MESSAGE = (
+    "No face detected. This detector is trained on photos of human faces, "
+    "so it can't give a reliable verdict on this image. "
+    "Try a clearer, front-facing photo."
+)
 
 # ============================================================
 # Model Architecture — matches Cell 6 exactly (EfficientNet-B0)
@@ -219,13 +229,74 @@ _startup()
 
 
 # ============================================================
+# Face preprocessing (rotation fix + face detection + crop)
+# ============================================================
+# --- FACE PREPROCESSING START ---
+_face_cascade = None
+
+
+def _get_face_cascade():
+    global _face_cascade
+    if _face_cascade is None:
+        _face_cascade = cv2.CascadeClassifier(
+            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+        )
+    return _face_cascade
+
+
+def _detect_largest_face(img):
+    """Largest face as (x, y, w, h) in the ORIGINAL image's pixel coordinates,
+    or None if no face is found. Detection runs on a downscaled copy."""
+    w, h = img.size
+    scale = min(1.0, DETECT_MAX_SIDE / max(w, h))
+    if scale < 1.0:
+        small = img.resize((max(1, int(w * scale)), max(1, int(h * scale))))
+    else:
+        small = img
+    gray = cv2.cvtColor(np.array(small), cv2.COLOR_RGB2GRAY)
+    faces = _get_face_cascade().detectMultiScale(
+        gray, scaleFactor=1.1, minNeighbors=5, minSize=(24, 24)
+    )
+    if len(faces) == 0:
+        return None
+    x, y, fw, fh = max(faces, key=lambda f: f[2] * f[3])
+    return (x / scale, y / scale, fw / scale, fh / scale)
+
+
+def _crop_box(face, scale, img_w, img_h):
+    """Square box centred on the face, side = face size x scale. It is shifted
+    (never padded) so it always stays inside the image."""
+    x, y, fw, fh = face
+    cx, cy = x + fw / 2, y + fh / 2
+    side = min(max(fw, fh) * scale, img_w, img_h)
+    left = min(max(cx - side / 2, 0), img_w - side)
+    top = min(max(cy - side / 2, 0), img_h - side)
+    return (int(left), int(top), int(left + side), int(top + side))
+
+
+def prepare_face(image_path):
+    """Open a photo the way a person sees it (EXIF rotation applied) and return
+    a square face crop for the model, or None when no face is found."""
+    upright = ImageOps.exif_transpose(Image.open(image_path)).convert('RGB')
+    face = _detect_largest_face(upright)
+    if face is None:
+        return None
+    return upright.crop(_crop_box(face, FACE_CROP_SCALE, *upright.size))
+# --- FACE PREPROCESSING END ---
+
+
+# ============================================================
 # Neural Network Prediction
 # ============================================================
 def predict_with_model(image_path):
     global _model, _device, _transform
 
     try:
-        image        = Image.open(image_path).convert('RGB')
+        image = prepare_face(image_path)
+        if image is None:
+            print(f"\n🔬 {os.path.basename(image_path)}: no face detected — no verdict given")
+            return {'no_face': True, 'error': NO_FACE_MESSAGE}
+
         input_tensor = _transform(image).unsqueeze(0).to(_device)
 
         with torch.no_grad():
@@ -272,6 +343,7 @@ def predict_with_model(image_path):
             'recommendation':       recommendation,
             'analysis_mode':        'neural_network',
             'model_accuracy':       MODEL_ACCURACY,
+            'face_detected':        True,
         }
 
     except Exception as e:
@@ -436,6 +508,7 @@ def index():
             const fd=new FormData();fd.append('file',file);
             const r=await fetch('/analyze',{method:'POST',body:fd});
             const d=await r.json();
+            if(d.error){res.innerHTML='<p>⚠️ '+d.error+'</p>';btn.disabled=false;btn.innerHTML='🔍 Analyze Image';return;}
             const pct=(d.confidence*100).toFixed(1);
             let badge,color;
             const k=d.class_key||'';
@@ -487,6 +560,10 @@ def analyze():
         if result is None:
             return jsonify({'error': 'Analysis failed'}), 500
 
+        # No face found: say so instead of guessing (the model only knows faces)
+        if result.get('no_face'):
+            return jsonify({'error': result['error'], 'code': 'no_face'}), 422
+
         save_to_history(file.filename, result, image_hash)
         return jsonify(result)
 
@@ -523,7 +600,13 @@ def batch_analyze():
             if os.path.exists(temp_path):
                 os.remove(temp_path)
 
-            if result:
+            if result and result.get('no_face'):
+                results.append({
+                    'filename': file.filename,
+                    'error':    result['error'],
+                    'code':     'no_face',
+                })
+            elif result:
                 results.append({
                     'filename':   file.filename,
                     'result':     result,
@@ -609,7 +692,10 @@ def model_status():
         'classes':       CLASS_NAMES,
         'class_display': CLASS_DISPLAY,
         'accuracy':      MODEL_ACCURACY,
-        'preprocessing': f'Resize({RESIZE_TO}) → CenterCrop({IMG_SIZE}) → Normalize(ImageNet)',
+        'preprocessing': (
+            f'EXIF rotate → face detect + crop (x{FACE_CROP_SCALE}) → '
+            f'Resize({RESIZE_TO}) → CenterCrop({IMG_SIZE}) → Normalize(ImageNet)'
+        ),
     })
 
 
