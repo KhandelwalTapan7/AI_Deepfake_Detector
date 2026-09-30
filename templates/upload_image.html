@@ -516,7 +516,7 @@ body::before {
   transition: all 0.25s;
 }
 .prev-card:hover { border-color: var(--indigo); transform: scale(1.02); }
-.prev-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
+.prev-card img { width: 100%; height: 120px; object-fit: contain; background: var(--raise); display: block; }
 .prev-foot {
   padding: 8px 10px;
   display: flex;
@@ -533,17 +533,24 @@ body::before {
 .prev-remove:hover { transform: scale(1.15); }
 
 /* ─── RESULT IMAGE ─── */
+/* object-fit:contain (not cover) so the whole photo is always visible —
+   a portrait phone photo used to get center-cropped to a sliver of face.
+   The --raise background fills any letterbox space around it. */
 .result-img-wrap {
   position: relative;
   width: 100%;
-  max-height: 320px;
+  max-height: 420px;
   overflow: hidden;
   border-radius: 0;
+  background: var(--raise);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .result-img {
   width: 100%;
-  max-height: 320px;
-  object-fit: cover;
+  max-height: 420px;
+  object-fit: contain;
   display: block;
   filter: brightness(0.92);
   transition: filter 0.3s;
@@ -1059,7 +1066,7 @@ canvas { max-height: 220px !important; }
   </div>
 
   <div class="nav-right">
-    <div class="acc-badge">ACC 95.27%</div>
+    <div class="acc-badge">ACC <span id="navAcc">95.27%</span></div>
     <div class="status-pill" id="statusPill">
       <div class="status-dot"></div>
       <span id="statusText">INITIALIZING</span>
@@ -1140,7 +1147,7 @@ canvas { max-height: 220px !important; }
     <div class="feature-trio">
       <div class="feat-card" onclick="showPage('detect')">
         <div class="feat-icon">🧠</div>
-        <div class="feat-title">95.27% Accuracy</div>
+        <div class="feat-title"><span id="homeFeatAcc">95.27%</span> Accuracy</div>
         <div class="feat-desc">Custom-trained EfficientNet-B0 on balanced real/AI/deepfake datasets with 5,000+ images per class.</div>
       </div>
       <div class="feat-card" onclick="showPage('features')">
@@ -1199,7 +1206,7 @@ canvas { max-height: 220px !important; }
           </div>
           <div class="panel-body">
             <div class="info-row"><span class="info-key">Architecture</span><span class="info-val indigo">EfficientNet-B0</span></div>
-            <div class="info-row"><span class="info-key">Accuracy</span><span class="info-val green">95.27%</span></div>
+            <div class="info-row"><span class="info-key">Accuracy</span><span class="info-val green" id="panelAcc">95.27%</span></div>
             <div class="info-row"><span class="info-key">Classes</span><span class="info-val">3</span></div>
             <div class="info-row"><span class="info-key">Resize</span><span class="info-val">232 → 224</span></div>
             <div class="info-row"><span class="info-key">Normalization</span><span class="info-val">ImageNet</span></div>
@@ -1237,7 +1244,7 @@ canvas { max-height: 220px !important; }
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center">
-        <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">95.27%</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Val Accuracy</div></div>
+        <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent" id="featuresAcc">95.27%</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Val Accuracy</div></div>
         <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">3</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Output Classes</div></div>
         <div><div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">&lt;1s</div><div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">Inference Time</div></div>
       </div>
@@ -1255,7 +1262,7 @@ canvas { max-height: 220px !important; }
       <div class="metric-card"><div class="metric-label">Total Scanned</div><div class="metric-num" id="aTotal">0</div></div>
       <div class="metric-card"><div class="metric-label">Avg Confidence</div><div class="metric-num" id="aConf">—</div></div>
       <div class="metric-card"><div class="metric-label">Fake Rate</div><div class="metric-num" id="aFakeRate">—</div></div>
-      <div class="metric-card"><div class="metric-label">Model Acc</div><div class="metric-num" style="font-size:1.6rem">95.27%</div></div>
+      <div class="metric-card"><div class="metric-label">Model Acc</div><div class="metric-num" style="font-size:1.6rem" id="analyticsAcc">95.27%</div></div>
     </div>
 
     <div class="chart-grid">
@@ -1325,7 +1332,7 @@ canvas { max-height: 220px !important; }
         <p style="color:var(--muted);font-size:0.9rem;line-height:1.9;max-width:560px;margin:0 auto">
           Aurora is a custom-trained neural network detection system built to expose AI-generated and manipulated imagery.
           Trained on a balanced three-class dataset with up to 5,000 images per class, the model achieves
-          <strong style="color:var(--text)">95.27% validation accuracy</strong> using an EfficientNet-B0 backbone
+          <strong style="color:var(--text)"><span id="aboutAccNum">95.27%</span> validation accuracy</strong> using an EfficientNet-B0 backbone
           with cosine annealing and differential fine-tuning.
         </p>
         <div class="tech-row">
@@ -1340,7 +1347,7 @@ canvas { max-height: 220px !important; }
       </div>
 
       <div class="about-stats">
-        <div class="astat"><div class="astat-num">95.27%</div><div class="astat-label">Val Accuracy</div></div>
+        <div class="astat"><div class="astat-num" id="aboutStatAcc">95.27%</div><div class="astat-label">Val Accuracy</div></div>
         <div class="astat"><div class="astat-num">B0</div><div class="astat-label">Architecture</div></div>
         <div class="astat"><div class="astat-num">3</div><div class="astat-label">Classes</div></div>
       </div>
@@ -1353,7 +1360,7 @@ canvas { max-height: 220px !important; }
 <div class="loader-veil" id="loaderVeil">
   <div class="loader-ring"></div>
   <div class="loader-text">RUNNING NEURAL INFERENCE</div>
-  <div class="loader-sub">EfficientNet-B0 · 95.27% accuracy</div>
+  <div class="loader-sub">EfficientNet-B0 · <span id="loaderAcc">95.27%</span> accuracy</div>
 </div>
 
 <!-- TOAST -->
@@ -1432,6 +1439,20 @@ updateHomeStats();
 /* ═══════════════════════════════════════════════
    MODEL STATUS
 ═══════════════════════════════════════════════ */
+// Every "95.27%" in the page used to be a separate hardcoded literal, so
+// updating the model meant hunting down and editing 9 different spots (and
+// easy to miss one, which is how the page ended up stale). Now they're all
+// driven from this one function, fed by the same number app.py reports.
+function applyAccuracy(acc) {
+  if (acc === undefined || acc === null) return;
+  const text = acc.toFixed(2) + '%';
+  ['navAcc','panelAcc','homeFeatAcc','featuresAcc','analyticsAcc',
+   'aboutAccNum','aboutStatAcc','loaderAcc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  });
+}
+
 async function checkStatus() {
   try {
     const r = await fetch('/model/status');
@@ -1446,6 +1467,7 @@ async function checkStatus() {
     document.getElementById('modelMode').textContent = d.mode === 'neural_network' ? 'Neural Network' : 'Forensic';
     document.getElementById('modelMode').className = 'info-val ' + (d.loaded ? 'green' : '');
     document.getElementById('modelDevice').textContent = d.device || '—';
+    applyAccuracy(d.accuracy);
   } catch(e) {
     document.getElementById('statusText').textContent = 'OFFLINE';
   }
@@ -1567,6 +1589,28 @@ document.getElementById('analyzeBtn').addEventListener('click', async () => {
 function displayResults(results, filePreviews = []) {
   const container = document.getElementById('resultsSection');
   results.forEach((item, idx) => {
+    // The backend refuses to guess when it can't find a face (code:'no_face')
+    // instead of returning a result -- show that plainly instead of crashing
+    // on item.result being undefined.
+    if (!item.result) {
+      const preview = filePreviews.find(p => p.name === item.filename) || filePreviews[idx] || null;
+      log('> ' + item.filename + ' -> no face detected, skipped', 't-amber');
+      const card = document.createElement('div');
+      card.className = 'result-card';
+      card.innerHTML =
+        '<div class="result-bar" style="background:var(--muted)"></div>' +
+        (preview ? '<div class="result-img-wrap"><img src="' + preview.dataUrl + '" alt="' + item.filename + '" class="result-img" style="filter:grayscale(0.6) brightness(0.6)"></div>' : '') +
+        '<div class="result-body">' +
+          '<div class="verdict" style="background:rgba(226,232,240,0.08);color:var(--muted);border:1px solid var(--border)">⚠ NO FACE DETECTED</div>' +
+          '<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);margin-top:12px;line-height:1.6">' +
+            (item.error || 'This detector only classifies photos with a visible human face.') +
+          '</p>' +
+          '<div class="result-file"><i class="fas fa-file-image"></i> ' + item.filename + '</div>' +
+        '</div>';
+      container.appendChild(card);
+      return;
+    }
+
     const r = item.result;
     const key = r.class_key || guessKey(r.class);
     const conf = (r.confidence * 100).toFixed(1);
@@ -1640,7 +1684,7 @@ function displayResults(results, filePreviews = []) {
   });
 
   updateHomeStats();
-  const fakeCount = results.filter(r => (r.result.class_key||'') !== 'real').length;
+  const fakeCount = results.filter(r => r.result && (r.result.class_key||'') !== 'real').length;
   toast('Analysis complete · ' + fakeCount + ' manipulation' + (fakeCount!==1?'s':'') + ' detected', fakeCount > 0 ? '⚠' : '✓');
 }
 
